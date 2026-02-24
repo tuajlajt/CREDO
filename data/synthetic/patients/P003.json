@@ -1,0 +1,337 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P003",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100003", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Robert", "middle_name": null, "last_name": "Chen" },
+      "date_of_birth": "1957-11-08",
+      "sex_at_birth": "male",
+      "blood_type": "B+"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-BUPA-3300", "payer": "Bupa", "plan_name": "Select", "coverage_type": "private" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "allowed" },
+      "preferences": { "communication": "portal", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 170 },
+    "last_visit": { "date": "2025-02-03", "visit_id": "V003_002" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-02-03T09:30:00Z",
+    "allergies": [],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications",
+        "status": "active", "onset_date": "2016-05-20", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential (primary) hypertension",
+        "status": "active", "onset_date": "2014-03-11", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "E78.5",
+        "display": "Hyperlipidaemia, unspecified",
+        "status": "active", "onset_date": "2016-05-20", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "inn": "metformin", "atc": "A10BA02",
+        "dose": "1000 mg", "frequency": "twice daily with meals",
+        "route": "oral", "status": "active",
+        "therapy_duration": "long_term", "administration_pattern": "regular",
+        "prn_condition": null, "ref_prescription_id": "RX003_001"
+      },
+      {
+        "inn": "lisinopril", "atc": "C09AA03",
+        "dose": "10 mg", "frequency": "once daily",
+        "route": "oral", "status": "active",
+        "therapy_duration": "long_term", "administration_pattern": "regular",
+        "prn_condition": null, "ref_prescription_id": "RX003_002"
+      },
+      {
+        "inn": "atorvastatin", "atc": "C10AA05",
+        "dose": "40 mg", "frequency": "once daily at night",
+        "route": "oral", "status": "active",
+        "therapy_duration": "long_term", "administration_pattern": "regular",
+        "prn_condition": null, "ref_prescription_id": "RX003_003"
+      },
+      {
+        "inn": "aspirin", "atc": "B01AC06",
+        "dose": "75 mg", "frequency": "once daily",
+        "route": "oral", "status": "active",
+        "therapy_duration": "long_term", "administration_pattern": "regular",
+        "prn_condition": null, "ref_prescription_id": "RX003_004"
+      }
+    ],
+    "risk_flags": [
+      {
+        "category": "cardiovascular", "type": "qrisk3_elevated",
+        "severity": "high",
+        "message": "QRISK3 score 22%. 10-year cardiovascular risk exceeds 20% threshold. On statin and antihypertensive treatment.",
+        "source": "risk_calculator", "generated_at": "2025-02-03T09:30:00Z"
+      },
+      {
+        "category": "polypharmacy", "type": "polypharmacy_4plus",
+        "severity": "medium",
+        "message": "Patient on 4 regular medications. Review for adherence and interactions at each visit.",
+        "source": "ddi_engine", "generated_at": "2025-02-03T09:30:00Z"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "I21.9",
+        "display": "Acute myocardial infarction, unspecified",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 61
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications",
+        "status": "active", "certainty": "confirmed"
+      }
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "former",
+    "alcohol": { "units_per_week": 8 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 1 },
+    "diet_pattern": "western"
+  },
+  "visits": [
+    {
+      "visit_id": "V003_001",
+      "patient_id": "P003",
+      "clinician_id": "CLN001",
+      "visit_date": "2024-08-15",
+      "type": "outpatient",
+      "patient_reported_reason": "Routine diabetes and hypertension review",
+      "clinician_notes": "Subjective: 66-year-old male for 6-monthly chronic disease review. No chest pain, no dyspnoea. Reports occasional dizziness on standing. Adherent to medications.\n\nObjective: BP 148/92 mmHg, HR 74 bpm, Weight 87 kg. HbA1c 58 mmol/mol (7.5%). Fasting glucose 8.2 mmol/L. eGFR 72 mL/min/1.73m2. Total cholesterol 4.8 mmol/L.\n\nAssessment: T2DM — suboptimal control. Hypertension — not at target (<130/80 in diabetic patient). Hyperlipidaemia — on statin, LDL borderline.\n\nPlan: Increase lisinopril to 10 mg OD (from 5 mg). Reinforce dietary advice and weight reduction. Repeat bloods in 3 months.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "E11.9",
+          "display": "Type 2 diabetes mellitus without complications",
+          "status": "active", "certainty": "confirmed"
+        },
+        {
+          "code_system": "ICD-10", "code": "I10",
+          "display": "Essential (primary) hypertension",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX003_002"],
+      "linked": {
+        "vital_ids": ["VT003_001", "VT003_002", "VT003_HR03", "VT003_SPO01"],
+        "order_ids": ["ORD003_001"],
+        "procedure_ids": [],
+        "document_ids": ["DOC003_001"],
+        "imaging_study_ids": []
+      }
+    },
+    {
+      "visit_id": "V003_002",
+      "patient_id": "P003",
+      "clinician_id": "CLN001",
+      "visit_date": "2025-02-03",
+      "type": "outpatient",
+      "patient_reported_reason": "Follow-up chronic disease review",
+      "clinician_notes": "Subjective: Routine 6-month review. Tolerating lisinopril 10 mg. Dizziness resolved. Adherent. Checking HbA1c and lipids.\n\nObjective: BP 134/82 mmHg, HR 72 bpm, Weight 85 kg. HbA1c 52 mmol/mol (6.9%). LDL 2.1 mmol/L. eGFR 70 mL/min/1.73m2.\n\nAssessment: Good improvement. T2DM approaching target. BP better controlled. Lipids well controlled on atorvastatin 40 mg.\n\nPlan: Continue all medications. Lifestyle reinforcement. 6-month review.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "E11.9",
+          "display": "Type 2 diabetes mellitus without complications",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": [],
+      "linked": {
+        "vital_ids": ["VT003_003", "VT003_004", "VT003_HR05", "VT003_W05"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": ["DOC003_002"],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX003_001", "patient_id": "P003",
+      "prescribed_date": "2016-05-20", "medicine_name": "Glucophage",
+      "inn": "metformin", "atc": "A10BA02",
+      "dose": "1000 mg", "frequency": "twice daily with meals",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "E11.9", "display": "Type 2 diabetes mellitus" },
+      "ref": { "type": "visit", "id": "V003_001" }
+    },
+    {
+      "prescription_id": "RX003_002", "patient_id": "P003",
+      "prescribed_date": "2024-08-15", "medicine_name": "Zestril",
+      "inn": "lisinopril", "atc": "C09AA03",
+      "dose": "10 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I10", "display": "Essential hypertension" },
+      "ref": { "type": "visit", "id": "V003_001" }
+    },
+    {
+      "prescription_id": "RX003_003", "patient_id": "P003",
+      "prescribed_date": "2016-05-20", "medicine_name": "Lipitor",
+      "inn": "atorvastatin", "atc": "C10AA05",
+      "dose": "40 mg", "frequency": "once daily at night",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "E78.5", "display": "Hyperlipidaemia" },
+      "ref": { "type": "visit", "id": "V003_001" }
+    },
+    {
+      "prescription_id": "RX003_004", "patient_id": "P003",
+      "prescribed_date": "2016-05-20", "medicine_name": "Aspirin",
+      "inn": "aspirin", "atc": "B01AC06",
+      "dose": "75 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "Z82.49", "display": "Cardiovascular risk reduction" },
+      "ref": { "type": "visit", "id": "V003_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT003_001", "patient_id": "P003",
+      "measured_at": "2024-08-15T09:00:00Z", "ref_visit_id": "V003_001",
+      "type": "blood_pressure", "systolic_mmHg": 148, "diastolic_mmHg": 92
+    },
+    {
+      "vital_id": "VT003_002", "patient_id": "P003",
+      "measured_at": "2024-08-15T09:00:00Z", "ref_visit_id": "V003_001",
+      "type": "weight", "value": 87, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_003", "patient_id": "P003",
+      "measured_at": "2025-02-03T09:00:00Z", "ref_visit_id": "V003_002",
+      "type": "blood_pressure", "systolic_mmHg": 134, "diastolic_mmHg": 82
+    },
+    {
+      "vital_id": "VT003_004", "patient_id": "P003",
+      "measured_at": "2025-02-03T09:00:00Z", "ref_visit_id": "V003_002",
+      "type": "blood_glucose", "value": 8.2, "unit": "mmol/L"
+    },
+    {
+      "vital_id": "VT003_W01", "patient_id": "P003",
+      "measured_at": "2022-02-10T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 91.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_W02", "patient_id": "P003",
+      "measured_at": "2022-09-05T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 90.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_W03", "patient_id": "P003",
+      "measured_at": "2023-04-18T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 89.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_W04", "patient_id": "P003",
+      "measured_at": "2023-11-22T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 88.4, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_W05", "patient_id": "P003",
+      "measured_at": "2025-02-03T09:00:00Z", "ref_visit_id": "V003_002",
+      "type": "weight", "value": 85.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT003_HR01", "patient_id": "P003",
+      "measured_at": "2022-02-10T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 82, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT003_HR02", "patient_id": "P003",
+      "measured_at": "2022-09-05T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 80, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT003_HR03", "patient_id": "P003",
+      "measured_at": "2024-08-15T09:00:00Z", "ref_visit_id": "V003_001",
+      "type": "heart_rate", "value": 74, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT003_HR04", "patient_id": "P003",
+      "measured_at": "2023-11-22T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 78, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT003_HR05", "patient_id": "P003",
+      "measured_at": "2025-02-03T09:00:00Z", "ref_visit_id": "V003_002",
+      "type": "heart_rate", "value": 72, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT003_SPO01", "patient_id": "P003",
+      "measured_at": "2024-08-15T09:00:00Z", "ref_visit_id": "V003_001",
+      "type": "spo2", "value": 97, "unit": "%"
+    },
+    {
+      "vital_id": "VT003_SPO02", "patient_id": "P003",
+      "measured_at": "2025-02-03T09:00:00Z", "ref_visit_id": "V003_002",
+      "type": "spo2", "value": 97, "unit": "%"
+    },
+    {
+      "vital_id": "VT003_SPO03", "patient_id": "P003",
+      "measured_at": "2023-04-18T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 98, "unit": "%"
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ORD003_001", "patient_id": "P003",
+      "ordered_at": "2024-08-15T09:15:00Z", "ref_visit_id": "V003_001",
+      "category": "lab",
+      "test": { "code_system": "LOINC", "code": "4548-4", "display": "HbA1c" },
+      "status": "completed"
+    }
+  ],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": [
+    {
+      "document_id": "DOC003_001", "patient_id": "P003",
+      "type": "lab_result", "lab_category": "endocrinology",
+      "title": "HbA1c and Metabolic Panel — Aug 2024",
+      "authored_date": "2024-08-16",
+      "file": {
+        "filename": "P003_HbA1c_Aug2024.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P003/P003_HbA1c_Aug2024.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V003_001"
+    },
+    {
+      "document_id": "DOC003_002", "patient_id": "P003",
+      "type": "lab_result", "lab_category": "endocrinology",
+      "title": "HbA1c and Lipid Panel — Feb 2025",
+      "authored_date": "2025-02-04",
+      "file": {
+        "filename": "P003_HbA1c_Feb2025.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P003/P003_HbA1c_Feb2025.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V003_002"
+    }
+  ]
+}

@@ -1,0 +1,190 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P002",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100002", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "James", "middle_name": "Edward", "last_name": "Mitchell" },
+      "date_of_birth": "1979-03-22",
+      "sex_at_birth": "male",
+      "blood_type": "O+"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-NHS-002", "payer": "NHS", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "denied" },
+      "preferences": { "communication": "phone", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 178 },
+    "last_visit": { "date": "2025-01-12", "visit_id": "V002_001" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-01-12T11:00:00Z",
+    "allergies": [],
+    "chronic_conditions": [],
+    "active_medications": [
+      {
+        "inn": "amoxicillin", "atc": "J01CA04",
+        "dose": "500 mg", "frequency": "three times daily",
+        "route": "oral", "status": "active",
+        "therapy_duration": "short_term",
+        "administration_pattern": "regular", "prn_condition": null,
+        "ref_prescription_id": "RX002_001"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "I21.9",
+        "display": "Acute myocardial infarction, unspecified",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 58
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "J18.9",
+        "display": "Pneumonia, unspecified organism",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 52
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "no",
+    "alcohol": { "units_per_week": 6 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 3 },
+    "diet_pattern": "western"
+  },
+  "visits": [
+    {
+      "visit_id": "V002_001",
+      "patient_id": "P002",
+      "clinician_id": "CLN001",
+      "visit_date": "2025-01-12",
+      "type": "outpatient",
+      "patient_reported_reason": "Cough, fever, and shortness of breath for three days",
+      "clinician_notes": "Subjective: 45-year-old male with 3-day history of productive cough with yellow sputum, fever to 38.8 C, and mild dyspnoea on exertion. No sick contacts. No recent travel. No prior respiratory conditions.\n\nObjective: T 38.6 C, HR 92 bpm, BP 124/78 mmHg, SpO2 96% on RA, RR 18/min. Dull percussion and bronchial breath sounds left lower zone. CXR: left lower lobe consolidation consistent with pneumonia. WBC 14.2 x10^9/L.\n\nAssessment: Community-acquired pneumonia, left lower lobe, CRB-65 score 0 (low severity, suitable for outpatient treatment).\n\nPlan: Amoxicillin 500 mg TID for 7 days. Increase fluid intake. Rest. Return if no improvement in 48 hours or worsening symptoms. Repeat CXR in 6 weeks to confirm resolution.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "J18.9",
+          "display": "Pneumonia, unspecified organism",
+          "status": "active", "onset_date": "2025-01-09", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX002_001"],
+      "linked": {
+        "vital_ids": ["VT002_001", "VT002_002", "VT002_HR04", "VT002_W04"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": [],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX002_001",
+      "patient_id": "P002",
+      "prescribed_date": "2025-01-12",
+      "medicine_name": "Amoxil",
+      "inn": "amoxicillin",
+      "atc": "J01CA04",
+      "dose": "500 mg",
+      "frequency": "three times daily",
+      "route": "oral",
+      "therapy_duration": "short_term",
+      "days_supply": 7,
+      "expected_end_date": "2025-01-19",
+      "prn": false,
+      "prn_condition": null,
+      "indication": {
+        "code_system": "ICD-10", "code": "J18.9",
+        "display": "Community-acquired pneumonia"
+      },
+      "ref": { "type": "visit", "id": "V002_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT002_001", "patient_id": "P002",
+      "measured_at": "2025-01-12T10:00:00Z", "ref_visit_id": "V002_001",
+      "type": "temperature", "value": 38.6, "unit": "degC"
+    },
+    {
+      "vital_id": "VT002_002", "patient_id": "P002",
+      "measured_at": "2025-01-12T10:00:00Z", "ref_visit_id": "V002_001",
+      "type": "spo2", "value": 96, "unit": "%"
+    },
+    {
+      "vital_id": "VT002_W01", "patient_id": "P002",
+      "measured_at": "2022-03-10T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 78.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT002_W02", "patient_id": "P002",
+      "measured_at": "2022-11-20T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 79.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT002_W03", "patient_id": "P002",
+      "measured_at": "2023-08-14T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 80.8, "unit": "kg"
+    },
+    {
+      "vital_id": "VT002_W04", "patient_id": "P002",
+      "measured_at": "2025-01-12T10:00:00Z", "ref_visit_id": "V002_001",
+      "type": "weight", "value": 81.4, "unit": "kg"
+    },
+    {
+      "vital_id": "VT002_W05", "patient_id": "P002",
+      "measured_at": "2024-05-22T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 82.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT002_HR01", "patient_id": "P002",
+      "measured_at": "2022-03-10T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 72, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT002_HR02", "patient_id": "P002",
+      "measured_at": "2022-11-20T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 74, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT002_HR03", "patient_id": "P002",
+      "measured_at": "2023-08-14T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 76, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT002_HR04", "patient_id": "P002",
+      "measured_at": "2025-01-12T10:00:00Z", "ref_visit_id": "V002_001",
+      "type": "heart_rate", "value": 92, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT002_HR05", "patient_id": "P002",
+      "measured_at": "2024-05-22T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 78, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT002_SPO01", "patient_id": "P002",
+      "measured_at": "2022-11-20T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 98, "unit": "%"
+    },
+    {
+      "vital_id": "VT002_SPO02", "patient_id": "P002",
+      "measured_at": "2024-05-22T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 99, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": []
+}

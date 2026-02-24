@@ -1,0 +1,16 @@
+# Radiologist Agent configuration
+# See: med_agents/radiologist-agent.md, src/agents/radiologist_agent.py
+
+radiologist_agent:
+  model_id: "google/medgemma-4b-it"
+  temperature: 0.1
+  max_new_tokens: 768
+  confidence_threshold: 0.6
+  always_require_review: true
+  # Critical findings that trigger immediate alert (regardless of queue)
+  critical_findings:
+    - "tension pneumothorax"
+    - "massive pulmonary embolism"
+    - "aortic dissection"
+    - "large intracranial haemorrhage"
+    - "spinal cord compression"

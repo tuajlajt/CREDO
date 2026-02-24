@@ -1,0 +1,14 @@
+# Pharmacology Agent configuration
+# See: med_agents/pharmacology-agent.md, src/agents/pharmacology_agent.py
+
+pharmacology_agent:
+  drug_database_path: "data/drug_databases/drugbank_lite.db"
+  interaction_database: "data/drug_databases/interactions.db"
+  interaction_database_version: "DrugBank 5.1.12"  # Update when database changes
+  severity_alert_threshold: "moderate"              # Alert for moderate AND major interactions
+  max_alternatives: 3
+  rxnorm_api_timeout_seconds: 5
+  always_require_review: true
+  # Free fallback APIs (no registration required):
+  #   Drug name mapping: https://rxnav.nlm.nih.gov/REST/rxcui.json
+  #   Adverse events:    https://api.fda.gov/drug/event.json

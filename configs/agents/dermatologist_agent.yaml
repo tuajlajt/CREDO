@@ -1,0 +1,11 @@
+# Dermatologist Agent configuration
+# See: med_agents/dermatologist-agent.md, src/agents/dermatologist_agent.py
+
+dermatologist_agent:
+  model_id: "google/medgemma-4b-it"
+  temperature: 0.1
+  max_new_tokens: 768
+  confidence_threshold: 0.6
+  always_require_review: true
+  # ABCDE assessment always performed
+  abcde_assessment: true

@@ -1,0 +1,50 @@
+# Main API service Dockerfile
+# Base: CUDA 12.1 + Python 3.11 for GPU inference
+# Runs as non-root user (appuser). Model weights mounted at runtime — never baked in.
+# See: med_agents/docker-engineer.md, claude/agents/docker-engineer.md
+
+FROM nvidia/cuda:12.1-cudnn8-runtime-ubuntu22.04
+
+# System dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 \
+    python3-pip \
+    python3.11-dev \
+    libgomp1 \
+    libglib2.0-0 \
+    # DICOM support
+    dcmtk \
+    # Audio processing
+    libsndfile1 \
+    ffmpeg \
+    # Network tools (healthcheck)
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Non-root user — medical services must never run as root
+RUN useradd -m -u 1000 appuser
+
+WORKDIR /app
+
+# Dependencies first (layer caching — rebuild only on requirements change)
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Application code
+COPY --chown=appuser:appuser src/ ./src/
+COPY --chown=appuser:appuser configs/ ./configs/
+COPY --chown=appuser:appuser main.py .
+
+# Model weights are MOUNTED at runtime — never baked into the image
+# See docker-compose.yml volumes section
+
+USER appuser
+
+# Healthcheck — Docker polls /health every 30 seconds
+# Returns 503 if models not loaded → container restart
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

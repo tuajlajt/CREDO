@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREDO — System Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e17;
+    --surface: #111827;
+    --surface-2: #1a2235;
+    --border: #1e2d44;
+    --border-accent: #2a4066;
+    --text: #e2e8f0;
+    --text-dim: #8896ab;
+    --text-faint: #4a5568;
+
+    --blue: #3b82f6; --cyan: #06b6d4; --emerald: #10b981; --amber: #f59e0b;
+    --rose: #f43f5e; --violet: #8b5cf6; --teal: #14b8a6; --orange: #f97316;
+    --pink: #ec4899; --indigo: #6366f1; --slate: #64748b; --yellow: #eab308;
+
+    --blue-g: rgba(59,130,246,0.12); --cyan-g: rgba(6,182,212,0.10);
+    --emerald-g: rgba(16,185,129,0.10); --amber-g: rgba(245,158,11,0.10);
+    --rose-g: rgba(244,63,94,0.10); --violet-g: rgba(139,92,246,0.10);
+    --teal-g: rgba(20,184,166,0.10); --orange-g: rgba(249,115,22,0.10);
+    --pink-g: rgba(236,72,153,0.10); --indigo-g: rgba(99,102,241,0.10);
+    --slate-g: rgba(100,116,139,0.10); --yellow-g: rgba(234,179,8,0.10);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'DM Sans',sans-serif; min-height:100vh; }
+
+  .canvas { max-width:1380px; margin:0 auto; padding:36px 24px 72px; }
+
+  /* ── Header ── */
+  .header { text-align:center; margin-bottom:48px; position:relative; }
+  .header::after { content:''; position:absolute; bottom:-18px; left:50%; transform:translateX(-50%); width:160px; height:1px; background:linear-gradient(90deg,transparent,var(--blue),transparent); }
+  .badge { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--cyan); background:rgba(6,182,212,0.07); border:1px solid rgba(6,182,212,0.18); padding:5px 14px; border-radius:20px; margin-bottom:14px; }
+  .header h1 { font-size:32px; font-weight:700; letter-spacing:-.5px; margin-bottom:8px; background:linear-gradient(135deg,#e2e8f0,#94a3b8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .tagline { color:var(--amber); font-size:15px; font-weight:500; margin-bottom:8px; letter-spacing:.2px; line-height:1.4; }
+  .header p { color:var(--text-dim); font-size:13px; max-width:800px; margin:0 auto; line-height:1.65; }
+
+  /* ── Stage ── */
+  .stage { margin-bottom:3px; animation:fadeUp .5s ease-out both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+  .row { display:flex; align-items:stretch; gap:12px; }
+  .lbl { width:136px; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; align-items:flex-end; padding-right:14px; text-align:right; }
+  .lbl .n { font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-faint); letter-spacing:1.5px; margin-bottom:2px; }
+  .lbl .t { font-size:11.5px; font-weight:600; color:var(--text-dim); text-transform:uppercase; letter-spacing:.3px; line-height:1.3; }
+  .cards { display:flex; gap:10px; flex:1; flex-wrap:wrap; }
+
+  /* ── Card ── */
+  .c { flex:1; min-width:190px; background:var(--surface); border:1px solid var(--border); border-radius:9px; padding:14px 16px; position:relative; overflow:hidden; transition:border-color .25s,box-shadow .25s; }
+  .c:hover { border-color:var(--border-accent); }
+  .c::before { content:''; position:absolute; top:0; left:0; right:0; height:2.5px; border-radius:9px 9px 0 0; }
+
+  .c.blue::before{background:var(--blue)} .c.blue:hover{box-shadow:0 3px 18px var(--blue-g)}
+  .c.cyan::before{background:var(--cyan)} .c.cyan:hover{box-shadow:0 3px 18px var(--cyan-g)}
+  .c.emerald::before{background:var(--emerald)} .c.emerald:hover{box-shadow:0 3px 18px var(--emerald-g)}
+  .c.amber::before{background:var(--amber)} .c.amber:hover{box-shadow:0 3px 18px var(--amber-g)}
+  .c.rose::before{background:var(--rose)} .c.rose:hover{box-shadow:0 3px 18px var(--rose-g)}
+  .c.violet::before{background:var(--violet)} .c.violet:hover{box-shadow:0 3px 18px var(--violet-g)}
+  .c.teal::before{background:var(--teal)} .c.teal:hover{box-shadow:0 3px 18px var(--teal-g)}
+  .c.orange::before{background:var(--orange)} .c.orange:hover{box-shadow:0 3px 18px var(--orange-g)}
+  .c.pink::before{background:var(--pink)} .c.pink:hover{box-shadow:0 3px 18px var(--pink-g)}
+  .c.indigo::before{background:var(--indigo)} .c.indigo:hover{box-shadow:0 3px 18px var(--indigo-g)}
+  .c.slate::before{background:var(--slate)} .c.slate:hover{box-shadow:0 3px 18px var(--slate-g)}
+  .c.yellow::before{background:var(--yellow)} .c.yellow:hover{box-shadow:0 3px 18px var(--yellow-g)}
+
+  .c .ico { font-size:18px; margin-bottom:6px; display:block; }
+  img.emoji { height:1em; width:1em; vertical-align:-0.1em; display:inline-block; }
+  .c h3 { font-size:13px; font-weight:600; margin-bottom:2px; letter-spacing:-.1px; }
+  .c .tag { font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.4px; padding:2px 6px; border-radius:3px; display:inline-block; margin-bottom:7px; font-weight:500; }
+  .c.blue .tag{color:var(--blue);background:var(--blue-g)} .c.cyan .tag{color:var(--cyan);background:var(--cyan-g)}
+  .c.emerald .tag{color:var(--emerald);background:var(--emerald-g)} .c.amber .tag{color:var(--amber);background:var(--amber-g)}
+  .c.rose .tag{color:var(--rose);background:var(--rose-g)} .c.violet .tag{color:var(--violet);background:var(--violet-g)}
+  .c.teal .tag{color:var(--teal);background:var(--teal-g)} .c.orange .tag{color:var(--orange);background:var(--orange-g)}
+  .c.pink .tag{color:var(--pink);background:var(--pink-g)} .c.indigo .tag{color:var(--indigo);background:var(--indigo-g)}
+  .c.slate .tag{color:var(--slate);background:var(--slate-g)} .c.yellow .tag{color:var(--yellow);background:var(--yellow-g)}
+
+  .c .d { font-size:11.5px; color:var(--text-dim); line-height:1.5; }
+  .c .io { margin-top:9px; padding-top:7px; border-top:1px solid var(--border); font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-faint); line-height:1.8; }
+  .c .io .i { color:var(--emerald); } .c .io .o { color:var(--amber); }
+  .c.w { min-width:100%; }
+
+  /* ── Connectors ── */
+  .conn { display:flex; justify-content:center; padding:1px 0; margin-left:136px; }
+  .conn .ln { width:2px; height:22px; background:linear-gradient(180deg,var(--border-accent),var(--border)); position:relative; }
+  .conn .ln::after { content:''; position:absolute; bottom:-2px; left:50%; width:6px; height:6px; border-right:1.5px solid var(--border-accent); border-bottom:1.5px solid var(--border-accent); transform:translateX(-50%) rotate(45deg); }
+
+  .divider { margin:8px 0 6px; display:flex; align-items:center; gap:10px; margin-left:136px; }
+  .divider .line { flex:1; height:1px; background:var(--border); }
+  .divider span { font-family:'JetBrains Mono',monospace; font-size:8.5px; color:var(--text-faint); letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap; }
+
+  .loop-label { display:flex; align-items:center; gap:8px; margin-left:136px; padding:5px 0; }
+  .loop-label .line { flex:1; height:1px; background:repeating-linear-gradient(90deg,var(--rose),var(--rose) 4px,transparent 4px,transparent 8px); }
+  .loop-label span { font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--rose); letter-spacing:.8px; text-transform:uppercase; white-space:nowrap; }
+
+  /* ── Legend (each item on its own row) ── */
+  .legend { margin-top:36px; padding:18px 22px; background:var(--surface); border:1px solid var(--border); border-radius:9px; }
+  .legend-title { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-faint); margin-bottom:12px; }
+  .legend-row { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--border); }
+  .legend-row:last-child { border-bottom:none; }
+  .legend-row .ld { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+  .legend-row .ln { font-size:13px; font-weight:600; color:var(--text); min-width:210px; }
+  .legend-row .ldesc { font-size:11.5px; color:var(--text-dim); flex:1; }
+
+  /* ── Bottom panels ── */
+  .panels { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px; }
+  .panel { padding:18px 20px; background:var(--surface); border:1px solid var(--border); border-radius:9px; }
+  .panel h4 { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-faint); margin-bottom:10px; }
+  .panel p { font-size:11.5px; color:var(--text-dim); line-height:1.55; margin-bottom:6px; }
+  .ptag { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:9px; padding:2px 5px; border-radius:3px; margin:1px 2px 1px 0; }
+  .ptag.g { color:var(--emerald); background:var(--emerald-g); }
+
+  .cot-bar { margin-top:16px; padding:12px 18px; background:linear-gradient(90deg,rgba(245,158,11,0.05),rgba(139,92,246,0.05)); border:1px solid rgba(245,158,11,0.12); border-radius:9px; display:flex; align-items:center; gap:12px; }
+  .cot-bar .ico { font-size:20px; flex-shrink:0; }
+  .cot-bar .txt { font-size:11.5px; color:var(--text-dim); line-height:1.5; }
+  .cot-bar .txt strong { color:var(--amber); }
+
+  @media(max-width:960px) {
+    .row { flex-direction:column; }
+    .lbl { width:auto; align-items:flex-start; padding:0 0 5px 0; text-align:left; }
+    .conn,.divider,.loop-label { margin-left:0; }
+    .panels { grid-template-columns:1fr; }
+    .legend-row { flex-wrap:wrap; }
+    .legend-row .ln { min-width:auto; }
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- HEADER                                                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="header">
+  <div class="badge">AGENTIC WORKFLOW</div>
+  <h1>CREDO</h1>
+  <div class="tagline">A virtual medical board for every patient.<br>Complete health profile in. Specialist consensus out.</div>
+  <p>Not a transcription tool — a clinical reasoning system. CREDO ingests the patient's complete health profile — medical history, lab trends, imaging, vitals, medications, and today's encounter — then convenes a panel of AI specialist agents who study the case, cross-reference findings, and deliver unified documentation with full chain-of-thought audit trails.</p>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 01: COMPLETE HEALTH PROFILE                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 01</div><div class="t">Complete<br>Health<br>Profile</div></div>
+    <div class="cards">
+
+      <div class="c blue">
+        <span class="ico">🗄️</span>
+        <h3>Existing EHR Data</h3>
+        <span class="tag">FHIR / HL7 / PDF / MIMIC-IV</span>
+        <div class="d">The full patient story — not isolated results. Demographics, allergies, chronic conditions, family history, surgical history, past visit notes, medication history, immunizations. Medical documents (referral letters, discharge summaries, specialist reports) may arrive as PDF — structured text extracted via <strong>docling</strong> with PyMuPDF / pdfplumber fallback.</div>
+        <div class="io">
+          <span class="o">OUT →</span> patient demographics &amp; allergy list<br>
+          <span class="o">OUT →</span> chronic condition list (ICD codes)<br>
+          <span class="o">OUT →</span> active medication list with dosages<br>
+          <span class="o">OUT →</span> prior imaging references<br>
+          <span class="o">OUT →</span> historical visit summaries<br>
+          <span class="o">OUT →</span> family history &amp; social factors<br>
+          <span class="o">OUT →</span> structured text from PDF documents (docling)
+        </div>
+      </div>
+
+      <div class="c emerald">
+        <span class="ico">🎙️</span>
+        <h3>Current Visit: Voice</h3>
+        <span class="tag">MEDASR</span>
+        <div class="d">Doctor dictates today's visit. MedASR handles drug names, anatomy, abbreviations, accented speech. Speaker diarization separates doctor and patient voices.</div>
+        <div class="io">
+          <span class="i">IN ←</span> audio stream (real-time / .wav)<br>
+          <span class="o">OUT →</span> clinical transcript (timestamped)<br>
+          <span class="o">OUT →</span> speaker diarization (doctor / patient)
+        </div>
+      </div>
+
+      <div class="c cyan">
+        <span class="ico">🩻</span>
+        <h3>Current Visit: Imaging</h3>
+        <span class="tag">DICOM / PNG / JPEG / PDF</span>
+        <div class="d">New images from today: CXR, skin photo, fundus, pathology slide, CT/MRI. Automatically paired with prior images for the same patient from EHR for longitudinal comparison.</div>
+        <div class="io">
+          <span class="i">IN ←</span> new image(s) from today's visit<br>
+          <span class="i">IN ←</span> prior images from EHR (same patient)<br>
+          <span class="o">OUT →</span> current image(s) with metadata<br>
+          <span class="o">OUT →</span> matched prior image(s) for comparison
+        </div>
+      </div>
+
+      <div class="c indigo">
+        <span class="ico">🧪</span>
+        <h3>Current Visit: Lab &amp; Vitals</h3>
+        <span class="tag">HL7 / FHIR / PDF OBSERVATIONS</span>
+        <div class="d">Today's results (CBC, BMP, HbA1c, TSH, cardiac markers, CRP) and current vitals (BP, HR, SpO2, temp). Historical lab trends from EHR for trajectory analysis — not just today's snapshot. Lab reports may be delivered as PDF; structured data extracted automatically via docling.</div>
+        <div class="io">
+          <span class="i">IN ←</span> today's lab results (structured)<br>
+          <span class="i">IN ←</span> lab report PDFs (extracted via docling)<br>
+          <span class="i">IN ←</span> current vital signs<br>
+          <span class="i">IN ←</span> historical lab trends (from EHR)<br>
+          <span class="o">OUT →</span> current labs with reference ranges<br>
+          <span class="o">OUT →</span> flagged abnormal values<br>
+          <span class="o">OUT →</span> lab trend trajectories
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="conn"><div class="ln"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 02: IMAGE ENCODING                                  -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 02</div><div class="t">Image<br>Encoding</div></div>
+    <div class="cards">
+
+      <div class="c violet">
+        <span class="ico">👁️</span>
+        <h3>Universal Medical Image Encoder</h3>
+        <span class="tag">MEDSIGLIP · 400M PARAMS · 448×448</span>
+        <div class="d">Dual-tower vision+text encoder. Processes <strong>all</strong> medical image modalities into a shared embedding space: CXR, dermatology, ophthalmology, pathology, CT/MRI. Produces numerical embeddings — the same encoder inside MedGemma's vision system, but standalone is far more efficient when you only need quantitative comparison, not text generation.</div>
+        <div class="io">
+          <span class="i">IN ←</span> current image(s) from Stage 01<br>
+          <span class="i">IN ←</span> matched prior image(s) from Stage 01<br>
+          <span class="o">OUT →</span> image embeddings per image (N × 768)<br>
+          <span class="o">OUT →</span> zero-shot classification scores<br>
+          <span class="o">OUT →</span> pairwise similarity (current vs prior)<br>
+          <span class="o">OUT →</span> progression drift score<br>
+          <span class="o">OUT →</span> change-point indices (longitudinal series)
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="conn"><div class="ln"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 03: CLINICAL REASONING + ROUTING                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 03</div><div class="t">Attending<br>Physician<br>+ Routing</div></div>
+    <div class="cards">
+
+      <div class="c amber w">
+        <span class="ico">🧠</span>
+        <h3>Clinical Reasoning Agent — The Attending</h3>
+        <span class="tag">MEDGEMMA 4B-IT (MULTIMODAL) · CHAIN-OF-THOUGHT</span>
+        <div class="d">
+          The AI primary care physician — the first to see the patient. Receives the <strong>complete health profile</strong> — not isolated data points, but the full patient context. Performs initial clinical reasoning with explicit chain-of-thought. Builds preliminary SOAP structure, extracts medication list, identifies clinical concerns.<br><br>
+          <strong>S / O LOCKED TO TRANSCRIPT:</strong> The Subjective and Objective sections are derived exclusively from what the doctor and patient said — no inference, no fabrication from EHR or imaging. Only Assessment (A) and Plan (P) synthesise across the full health profile and specialist findings.<br><br>
+          <strong>CONVENES THE BOARD:</strong> Based on all available evidence — imaging modalities, transcript findings, lab abnormalities, patient history, medication signals — decides which specialist agents to consult, and which are not needed. Just as a real attending would say "I want cardiology and pulm to look at this," the orchestrator routes the case to only the relevant specialists.
+        </div>
+        <div class="io">
+          <span class="i">IN ←</span> clinical transcript (from MedASR)<br>
+          <span class="i">IN ←</span> full patient EHR context<br>
+          <span class="i">IN ←</span> active medication list with dosages<br>
+          <span class="i">IN ←</span> current + historical labs &amp; vitals<br>
+          <span class="i">IN ←</span> MedSigLIP embeddings + classification + drift scores<br>
+          <span class="o">OUT →</span> preliminary SOAP — <strong>S / O locked to transcript</strong>; A / P synthesised (with CoT)<br>
+          <span class="o">OUT →</span> extracted medication list<br>
+          <span class="o">OUT →</span> preliminary ICD-10 candidates<br>
+          <span class="o">OUT →</span> clinical concern flags<br>
+          <span class="o">OUT →</span> <strong>board routing → specialist(s) to consult</strong><br>
+          <span class="o">OUT →</span> tailored context packet per specialist
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"><div class="line"></div><span>The board convenes — specialist agents + medication checks dispatched simultaneously</span><div class="line"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 04: THE MEDICAL BOARD                               -->
+<!-- ══════════════════════════════════════════════════════════ -->
+
+<!-- Row 1: Specialists -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 04</div><div class="t">The Medical<br>Board<br><span style="color:var(--text-faint);font-weight:400;font-size:9px">(parallel)</span></div></div>
+    <div class="cards">
+
+      <div class="c cyan">
+        <span class="ico">🩻</span>
+        <h3>Radiologist</h3>
+        <span class="tag">MEDGEMMA 4B-IT</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">CXR FOUNDATION</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">CT FOUNDATION</span>
+        <div class="d">Interprets CXR / CT / MRI with prior comparison. Uses MedSigLIP progression score + image pairs. Identifies interval changes, new findings, progression or resolution.</div>
+        <div class="io">
+          <span class="i">IN ←</span> current + prior images<br>
+          <span class="i">IN ←</span> MedSigLIP embeddings + drift score<br>
+          <span class="i">IN ←</span> context packet from attending<br>
+          <span class="o">OUT →</span> radiological findings (with CoT)<br>
+          <span class="o">OUT →</span> interval change assessment<br>
+          <span class="o">OUT →</span> imaging recommendations
+        </div>
+      </div>
+
+      <div class="c pink">
+        <span class="ico">🔬</span>
+        <h3>Dermatologist</h3>
+        <span class="tag">MEDGEMMA 4B-IT</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">DERM FOUNDATION</span>
+        <div class="d">Analyzes skin images via MedSigLIP zero-shot (79 conditions). Considers atopic march (eczema → asthma). Flags drug-induced skin reactions. Identifies melanoma risk.</div>
+        <div class="io">
+          <span class="i">IN ←</span> skin image(s)<br>
+          <span class="i">IN ←</span> MedSigLIP derm classification scores<br>
+          <span class="i">IN ←</span> context packet (allergy history, meds)<br>
+          <span class="o">OUT →</span> dermatological assessment (with CoT)<br>
+          <span class="o">OUT →</span> differential diagnosis<br>
+          <span class="o">OUT →</span> comorbidity flags (atopic march)
+        </div>
+      </div>
+
+      <div class="c teal">
+        <span class="ico">🫀</span>
+        <h3>Cardiologist</h3>
+        <span class="tag">MEDGEMMA 4B-IT</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">HEAR</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">CXR FOUNDATION</span>
+        <div class="d">Interprets cardiac markers (troponin, BNP), CXR cardiac findings (cardiomegaly, edema), vitals trends. Assesses heart failure staging and diabetic cardiomyopathy risk.</div>
+        <div class="io">
+          <span class="i">IN ←</span> cardiac lab values + trends<br>
+          <span class="i">IN ←</span> CXR cardiac silhouette images<br>
+          <span class="i">IN ←</span> vital signs + context packet<br>
+          <span class="o">OUT →</span> cardiac assessment (with CoT)<br>
+          <span class="o">OUT →</span> heart failure staging<br>
+          <span class="o">OUT →</span> cardiomegaly progression score
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Row 2: More specialists -->
+<div class="stage" style="margin-top:4px;">
+  <div class="row">
+    <div class="lbl"><div class="n" style="opacity:0">04b</div><div class="t"></div></div>
+    <div class="cards">
+
+      <div class="c orange">
+        <span class="ico">🫁</span>
+        <h3>Pulmonologist</h3>
+        <span class="tag">MEDGEMMA 4B-IT</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">HEAR</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">CXR FOUNDATION</span>
+        <div class="d">Lung-focused: effusion tracking, emphysema progression, pneumonia assessment. Evaluates asthma-eczema comorbidity (atopic march). Integrates PFT/spirometry with imaging trends.</div>
+        <div class="io">
+          <span class="i">IN ←</span> CXR lung fields + MedSigLIP scores<br>
+          <span class="i">IN ←</span> PFT / spirometry history<br>
+          <span class="i">IN ←</span> context packet (smoking, meds, atopy)<br>
+          <span class="o">OUT →</span> pulmonary assessment (with CoT)<br>
+          <span class="o">OUT →</span> effusion / emphysema progression<br>
+          <span class="o">OUT →</span> asthma–atopy correlation
+        </div>
+      </div>
+
+      <div class="c indigo">
+        <span class="ico">🧬</span>
+        <h3>Endocrinologist</h3>
+        <span class="tag">MEDGEMMA 4B-IT</span> <span class="tag" style="color:var(--slate);background:var(--slate-g);">PATH FOUNDATION</span>
+        <div class="d">Metabolic &amp; hormonal reasoning. Tracks HbA1c / glucose for diabetes, TSH / T3 / T4 for Hashimoto's. Cross-references fundus (diabetic retinopathy), CXR (diabetic cardiomyopathy), derm (diabetic skin changes). The specialist who touches every other specialty.</div>
+        <div class="io">
+          <span class="i">IN ←</span> HbA1c, glucose, TSH, T3/T4 trends<br>
+          <span class="i">IN ←</span> fundus images + MedSigLIP DR scores<br>
+          <span class="i">IN ←</span> context (BMI, family hx, medications)<br>
+          <span class="o">OUT →</span> endocrine assessment (with CoT)<br>
+          <span class="o">OUT →</span> diabetes control trajectory<br>
+          <span class="o">OUT →</span> cross-organ complication flags<br>
+          <span class="o">OUT →</span> Hashimoto's monitoring status
+        </div>
+      </div>
+
+      <div class="c slate">
+        <span class="ico">➕</span>
+        <h3>Additional Specialists</h3>
+        <span class="tag">MEDGEMMA 4B-IT · EXTENSIBLE</span>
+        <div class="d">The board grows with the patient's needs. Ophthalmology (DR screening), Oncology (lung nodules, melanoma), Nephrology (CKD staging), Infectious Disease, Neurology, Rheumatology — any specialty, same MedGemma 4B-IT backbone with specialty-specific prompting.</div>
+        <div class="io">
+          <span class="i">IN ←</span> specialty-specific data<br>
+          <span class="i">IN ←</span> MedSigLIP embeddings for modality<br>
+          <span class="i">IN ←</span> context packet from attending<br>
+          <span class="o">OUT →</span> specialist assessment (with CoT)
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="margin-left:136px;margin-top:7px;margin-bottom:2px;padding:0 2px;">
+  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-faint);font-style:italic;">* models with grayed-out tags are not yet implemented</span>
+</div>
+
+  <div class="divider"><div class="line"></div><span>parallel run — clinical pharmacology agent</span><div class="line"></div></div>
+
+<!-- Medication checks (parallel with specialists) — TWO SEPARATE CARDS -->
+<div class="stage" style="margin-top:4px;">
+  <div class="row">
+    <div class="lbl"><div class="n" style="opacity:0">04c</div><div class="t" style="font-size:10px;color:var(--text-faint)">Parallel<br>med check</div></div>
+    <div class="cards">
+
+      <div class="c rose">
+        <span class="ico">💊</span>
+        <h3>Medication Symptom Checker</h3>
+        <span class="tag">MEDGEMMA 27B-IT + RAG KNOWLEDGE BASE</span>
+        <div class="d">Checks if current symptoms from transcript could be side effects of active medications. Example: dry cough → ACE inhibitor? Rash → antibiotic hypersensitivity? Uses RAG over drug side-effect database.</div>
+        <div class="io">
+          <span class="i">IN ←</span> active medication list (from attending)<br>
+          <span class="i">IN ←</span> symptoms from transcript<br>
+          <span class="i">IN ←</span> drug side-effect database (RAG)<br>
+          <span class="o">OUT →</span> symptom–medication correlations (with CoT)<br>
+          <span class="o">OUT →</span> confidence score per correlation<br>
+          <span class="o">OUT →</span> recommendation (discontinue / monitor / safe)
+        </div>
+      </div>
+
+      <div class="c rose">
+        <span class="ico">⚠️</span>
+        <h3>DDI Engine</h3>
+        <span class="tag">RULE ENGINE + DRUG INTERACTION DATABASE</span>
+        <div class="d">Deterministic pairwise check of all active medications. Severity grading: critical / major / moderate / minor. Cross-references patient conditions (renal/hepatic function) for clearance-dependent interactions.</div>
+        <div class="io">
+          <span class="i">IN ←</span> active medication list<br>
+          <span class="i">IN ←</span> patient conditions (renal/hepatic function)<br>
+          <span class="i">IN ←</span> drug interaction database<br>
+          <span class="o">OUT →</span> DDI alerts (severity-graded)<br>
+          <span class="o">OUT →</span> contraindication flags<br>
+          <span class="o">OUT →</span> dosing adjustment recommendations
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="divider"><div class="line"></div><span>All specialist reports + medication checks complete → return to synthesis</span><div class="line"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 05: BOARD SYNTHESIS                                 -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 05</div><div class="t">Board<br>Synthesis</div></div>
+    <div class="cards">
+
+      <div class="c amber w">
+        <span class="ico">📋</span>
+        <h3>Clinical Synthesis Agent — Board Summary</h3>
+        <span class="tag">MEDGEMMA 27B-IT (TEXT) · CHAIN-OF-THOUGHT</span>
+        <div class="d">
+          A separate agent from the attending — think chief of staff reviewing all consult notes. Receives all specialist reports, medication alerts, and the preliminary SOAP from the attending (Stage 03). Synthesizes into final unified documentation with explicit chain-of-thought. Resolves cross-specialty conflicts — when the radiologist sees an infiltrate and the medication checker suspects drug-induced pneumonitis, the synthesis agent weighs both perspectives against the evidence and documents the reasoning.<br><br>
+          <strong>PHYSICIAN REVIEW + EDIT:</strong> The doctor reviews the synthesized output here and <strong>can edit any section</strong> — modifying the SOAP note, adjusting ICD-10 codes, adding clinical context, or overriding agent recommendations. All physician edits are tracked as part of the audit trail. When the doctor prescribes new medications → Stage 06 fires automatically.
+        </div>
+        <div class="io">
+          <span class="i">IN ←</span> radiologist CoT report<br>
+          <span class="i">IN ←</span> dermatologist CoT report<br>
+          <span class="i">IN ←</span> cardiologist CoT report<br>
+          <span class="i">IN ←</span> pulmonologist CoT report<br>
+          <span class="i">IN ←</span> endocrinologist CoT report<br>
+          <span class="i">IN ←</span> additional specialist CoT reports<br>
+          <span class="i">IN ←</span> symptom–medication correlations<br>
+          <span class="i">IN ←</span> DDI alerts on active medications<br>
+          <span class="i">IN ←</span> preliminary SOAP from Stage 03<br>
+          <span class="i">IN ←</span> MedSigLIP progression data from Stage 02<br>
+          <span class="i">IN ←</span> physician edits &amp; overrides (if any)<br>
+          <span class="o">OUT →</span> final SOAP note (S / O / A / P)<br>
+          <span class="o">OUT →</span> ICD-10 codes (with confidence scores)<br>
+          <span class="o">OUT →</span> CPT codes (with justifications)<br>
+          <span class="o">OUT →</span> disease progression report<br>
+          <span class="o">OUT →</span> aggregated safety alerts<br>
+          <span class="o">OUT →</span> cross-specialty reconciliation notes
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="conn"><div class="ln"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 06: POST-PRESCRIPTION SAFETY LOOP                   -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 06</div><div class="t">Post-Rx<br>Safety</div></div>
+    <div class="cards">
+
+      <div class="c rose">
+        <span class="ico">🔄</span>
+        <h3>Post-Prescription DDI Check</h3>
+        <span class="tag">DDI ENGINE · TRIGGERED ON NEW Rx</span>
+        <div class="d">Fires automatically when doctor prescribes new medications. Checks new Rx against all active medications + patient conditions. Alerts before prescription is finalized.</div>
+        <div class="io">
+          <span class="i">IN ←</span> newly prescribed medication(s)<br>
+          <span class="i">IN ←</span> all active medications<br>
+          <span class="i">IN ←</span> patient conditions &amp; organ function<br>
+          <span class="o">OUT →</span> new DDI alerts (severity-graded)<br>
+          <span class="o">OUT →</span> new contraindication flags<br>
+          <span class="o">OUT →</span> dosing adjustments for new Rx
+        </div>
+      </div>
+
+      <div class="c rose">
+        <span class="ico">🛡️</span>
+        <h3>Confidence Gating &amp; Escalation</h3>
+        <span class="tag">RULE ENGINE + AUDIT TRAIL</span>
+        <div class="d">Final validation gate. Cross-checks all outputs for consistency. Critical DDIs block prescription until physician acknowledges. Every CoT chain and physician edit preserved for audit.</div>
+        <div class="io">
+          <span class="i">IN ←</span> all agent outputs + confidence scores<br>
+          <span class="i">IN ←</span> post-Rx DDI results<br>
+          <span class="i">IN ←</span> physician edits from Stage 05<br>
+          <span class="o">OUT →</span> validated documentation package<br>
+          <span class="o">OUT →</span> blocked items requiring sign-off<br>
+          <span class="o">OUT →</span> complete audit trail (all CoT chains)
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="loop-label">
+  <div class="line"></div>
+  <span>🔄 Loop — doctor modifies prescription → re-run post-Rx check until clean or overridden</span>
+  <div class="line"></div>
+</div>
+
+<div class="conn"><div class="ln"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- STAGE 07: FINAL OUTPUT                                    -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="stage">
+  <div class="row">
+    <div class="lbl"><div class="n">STAGE 07</div><div class="t">Final<br>Output</div></div>
+    <div class="cards">
+
+      <div class="c blue w">
+        <div style="display:flex;gap:20px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:145px;">
+            <span class="ico">📋</span>
+            <h3>SOAP Note</h3>
+            <div class="d">Structured documentation with specialist consensus, physician edits tracked, full CoT audit chain for every clinical decision.</div>
+          </div>
+          <div style="flex:1;min-width:145px;">
+            <span class="ico">🏷️</span>
+            <h3>ICD-10 / CPT</h3>
+            <div class="d">Diagnostic + billing codes with confidence scores and justification. Cross-specialty code reconciliation.</div>
+          </div>
+          <div style="flex:1;min-width:145px;">
+            <span class="ico">📈</span>
+            <h3>Progression Report</h3>
+            <div class="d">MedSigLIP visual drift, lab trend trajectories, medication response timeline, disease trajectory.</div>
+          </div>
+          <div style="flex:1;min-width:145px;">
+            <span class="ico">🚨</span>
+            <h3>Safety Dashboard</h3>
+            <div class="d">DDI alerts, symptom–medication flags, critical imaging findings, escalation items requiring sign-off.</div>
+          </div>
+          <div style="flex:1;min-width:145px;">
+            <span class="ico">🔍</span>
+            <h3>Audit Trail</h3>
+            <div class="d">Every agent's reasoning chain + physician edits preserved. Structured to support regulatory and legal documentation requirements.</div>
+          </div>
+        </div>
+        <div class="io" style="margin-top:14px;">
+          <span class="o">OUT →</span> <strong>write-back to EHR</strong> (FHIR / HL7 — SOAP note, ICD-10/CPT, medication changes, imaging reports)<br>
+          <span class="o">OUT →</span> physician-facing dashboard (review, edit, sign-off)<br>
+          <span class="o">OUT →</span> audit archive (all CoT chains + physician edits + confidence scores)
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- LEGEND — each item on its own row                         -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="legend">
+  <div class="legend-title">HAI-DEF Models &amp; Components</div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--emerald)"></div>
+    <div class="ln">MedASR</div>
+    <div class="ldesc">Medical speech recognition — drug names, anatomy, abbreviations, speaker diarization</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--violet)"></div>
+    <div class="ln">MedSigLIP</div>
+    <div class="ldesc">Universal medical image encoder (400M params) — CXR, derm, ophthalmology, pathology, CT/MRI. Embeddings, zero-shot classification, progression scoring</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--amber)"></div>
+    <div class="ln">MedGemma 27B-IT</div>
+    <div class="ldesc">Clinical text reasoning — clinical board opinion synthesis, medication symptom analysis</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--cyan)"></div>
+    <div class="ln">MedGemma 4B-IT</div>
+    <div class="ldesc">Multimodal specialist board — attending physician (orchestration + routing), vision-language agents for radiology, dermatology, cardiology, pulmonology, endocrinology, and extensible specialties</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--rose)"></div>
+    <div class="ln">Clinical Pharmacology Agent</div>
+    <div class="ldesc">Medication safety — symptom–medication correlation (MedGemma 27B + RAG), drug-drug interaction engine (rule-based), post-prescription validation</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--blue)"></div>
+    <div class="ln">EHR Integration</div>
+    <div class="ldesc">FHIR / HL7 bidirectional pipeline — reads complete health profile, writes back SOAP notes, codes, and medication changes</div>
+  </div>
+
+  <div class="legend-row">
+    <div class="ld" style="background:var(--slate)"></div>
+    <div class="ln">Extensible Architecture</div>
+    <div class="ldesc">Unlimited specialist agents on the same MedGemma 4B-IT backbone — ophthalmology, oncology, nephrology, infectious disease, neurology, etc.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- BOTTOM PANELS                                             -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div class="panels">
+  <div class="panel">
+    <h4>🩻 Supported Imaging Modalities &amp; Datasets</h4>
+    <p><strong>Radiology:</strong> NIH ChestX-ray14 (112K, longitudinal), MIMIC-CXR + MIMIC-IV (377K, full EHR), CheXpert</p>
+    <p><strong>Dermatology:</strong> SCIN (Google/Stanford, diverse tones), HAM10000, EIR (eczema subtypes), Fitzpatrick17k, DDI (Stanford)</p>
+    <p><strong>Ophthalmology:</strong> EyePACS (diabetic retinopathy), Messidor</p>
+    <p><strong>Pathology:</strong> CAMELYON, TCGA, PatchCamelyon</p>
+    <div style="margin-top:4px;">
+      <span class="ptag g">CXR</span><span class="ptag g">CT/MRI</span><span class="ptag g">derm</span><span class="ptag g">fundus</span><span class="ptag g">pathology</span>
+    </div>
+  </div>
+  <div class="panel">
+    <h4>🔀 Board Routing Logic (Stage 03)</h4>
+    <p>The attending decides which specialists to consult based on:</p>
+    <p>• <strong>Imaging present:</strong> CXR → radiologist; skin photo → dermatologist; fundus → ophth</p>
+    <p>• <strong>Transcript signals:</strong> "rash on arms" → dermatologist even without image</p>
+    <p>• <strong>Lab triggers:</strong> elevated troponin → cardiologist; high HbA1c → endocrinologist</p>
+    <p>• <strong>History patterns:</strong> known eczema + new wheeze → derm + pulm (atopic march)</p>
+    <p>• <strong>Cross-specialty:</strong> diabetic + fundus image → endocrinologist + ophthalmologist</p>
+    <p>• <strong>Always active:</strong> Medication Symptom Checker + DDI Engine run on every visit</p>
+  </div>
+</div>
+
+<div class="cot-bar">
+  <div class="ico">⛓️</div>
+  <div class="txt">
+    <strong>Chain-of-Thought at every stage.</strong> The Attending (03), every Board Specialist (04), the Medication Symptom Checker (04), and the Synthesis Agent (05) all produce explicit reasoning traces. Combined with tracked physician edits, this creates a complete audit trail: what the system recommended, why, and what the physician accepted, modified, or overrode. This documentation structure is designed to support the transparency and traceability that regulatory pathways (such as FDA Software as a Medical Device frameworks) and clinical liability review would expect — though actual regulatory compliance depends on the specific deployment context and approval process.
+  </div>
+</div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/twemoji@14.0.2/dist/twemoji.min.js" crossorigin="anonymous"></script>
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    twemoji.parse(document.body, { folder: 'svg', ext: '.svg' });
+  });
+</script>
+</body>
+</html>

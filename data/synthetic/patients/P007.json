@@ -1,0 +1,250 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P007",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100007", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "David", "middle_name": null, "last_name": "Kowalski" },
+      "date_of_birth": "1966-07-17",
+      "sex_at_birth": "male",
+      "blood_type": "O+"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-NFZ-7700", "payer": "NFZ", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "allowed" },
+      "preferences": { "communication": "phone", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 176 },
+    "last_visit": { "date": "2025-02-10", "visit_id": "V007_001" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-02-10T11:00:00Z",
+    "allergies": [],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "J44.1",
+        "display": "Chronic obstructive pulmonary disease with acute exacerbation",
+        "status": "active", "onset_date": "2018-09-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential (primary) hypertension",
+        "status": "active", "onset_date": "2015-04-20", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Spiriva",
+        "inn": "tiotropium",
+        "atc": "R03BB04",
+        "dose": "18 mcg",
+        "frequency": "once daily via HandiHaler",
+        "route": "inhaled",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX007_001"
+      },
+      {
+        "medicine_name": "Norvasc",
+        "inn": "amlodipine",
+        "atc": "C08CA01",
+        "dose": "5 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX007_002"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "J44.0",
+        "display": "Chronic obstructive pulmonary disease with acute lower respiratory infection",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 65
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential (primary) hypertension",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 58
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "former",
+    "alcohol": { "units_per_week": 10 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 1 },
+    "diet_pattern": "western"
+  },
+  "visits": [
+    {
+      "visit_id": "V007_001",
+      "patient_id": "P007",
+      "clinician_id": "CLN003",
+      "visit_date": "2025-02-10",
+      "type": "outpatient",
+      "patient_reported_reason": "Worsening breathlessness and increased sputum production over 5 days",
+      "clinician_notes": "Subjective: 58-year-old male ex-smoker (stopped 2020, 30 pack-year history) with known GOLD 2 COPD. Presents with 5-day history of increased dyspnoea, increased sputum volume, change in sputum colour from white to yellow-green. No fever. Using reliever inhaler more frequently than usual (Ventolin).\n\nObjective: RR 20/min, SpO2 91% on RA, T 37.1 C, HR 88 bpm, BP 142/88 mmHg. Widespread expiratory wheeze bilaterally. Hyperinflated chest. Peak flow 210 L/min (55% predicted). CXR: hyperinflation, no consolidation.\n\nAssessment: Acute exacerbation of COPD — moderate severity (Anthonisen criteria: increased dyspnoea, increased sputum volume, purulent sputum).\n\nPlan: Doxycycline 200 mg stat then 100 mg OD for 5 days. Prednisolone 30 mg OD for 5 days. Increase Ventolin to 4-6 puffs every 4 hours. Continue tiotropium. Review in 48 hours. Safety-net: return if SpO2 drops below 88%.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "J44.1",
+          "display": "Chronic obstructive pulmonary disease with acute exacerbation",
+          "status": "active", "onset_date": "2025-02-05", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX007_001", "RX007_002", "RX007_003", "RX007_004"],
+      "linked": {
+        "vital_ids": ["VT007_001", "VT007_002", "VT007_HR04", "VT007_W04"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": [],
+        "imaging_study_ids": ["IMG007_001"]
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX007_001", "patient_id": "P007",
+      "prescribed_date": "2018-09-15", "medicine_name": "Spiriva HandiHaler",
+      "inn": "tiotropium", "atc": "R03BB04",
+      "dose": "18 mcg", "frequency": "once daily via HandiHaler",
+      "route": "inhaled", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "J44.1", "display": "COPD maintenance" },
+      "ref": { "type": "visit", "id": "V007_001" }
+    },
+    {
+      "prescription_id": "RX007_002", "patient_id": "P007",
+      "prescribed_date": "2015-04-20", "medicine_name": "Norvasc",
+      "inn": "amlodipine", "atc": "C08CA01",
+      "dose": "5 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I10", "display": "Essential hypertension" },
+      "ref": { "type": "visit", "id": "V007_001" }
+    },
+    {
+      "prescription_id": "RX007_003", "patient_id": "P007",
+      "prescribed_date": "2025-02-10", "medicine_name": "Doxycycline",
+      "inn": "doxycycline", "atc": "J01AA02",
+      "dose": "100 mg", "frequency": "once daily (200 mg loading dose on day 1)",
+      "route": "oral", "therapy_duration": "short_term",
+      "days_supply": 5, "expected_end_date": "2025-02-15",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "J44.1", "display": "COPD exacerbation — antibiotic" },
+      "ref": { "type": "visit", "id": "V007_001" }
+    },
+    {
+      "prescription_id": "RX007_004", "patient_id": "P007",
+      "prescribed_date": "2025-02-10", "medicine_name": "Prednisolone",
+      "inn": "prednisolone", "atc": "H02AB06",
+      "dose": "30 mg", "frequency": "once daily in the morning",
+      "route": "oral", "therapy_duration": "short_term",
+      "days_supply": 5, "expected_end_date": "2025-02-15",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "J44.1", "display": "COPD exacerbation — systemic corticosteroid" },
+      "ref": { "type": "visit", "id": "V007_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT007_001", "patient_id": "P007",
+      "measured_at": "2025-02-10T10:30:00Z", "ref_visit_id": "V007_001",
+      "type": "spo2", "value": 91, "unit": "%"
+    },
+    {
+      "vital_id": "VT007_002", "patient_id": "P007",
+      "measured_at": "2025-02-10T10:30:00Z", "ref_visit_id": "V007_001",
+      "type": "blood_pressure", "systolic_mmHg": 142, "diastolic_mmHg": 88
+    },
+    {
+      "vital_id": "VT007_W01", "patient_id": "P007",
+      "measured_at": "2022-04-12T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 83.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT007_W02", "patient_id": "P007",
+      "measured_at": "2022-11-08T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 84.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT007_W03", "patient_id": "P007",
+      "measured_at": "2023-07-25T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 84.8, "unit": "kg"
+    },
+    {
+      "vital_id": "VT007_W04", "patient_id": "P007",
+      "measured_at": "2025-02-10T10:30:00Z", "ref_visit_id": "V007_001",
+      "type": "weight", "value": 86.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT007_W05", "patient_id": "P007",
+      "measured_at": "2024-05-14T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 85.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT007_HR01", "patient_id": "P007",
+      "measured_at": "2022-04-12T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 82, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT007_HR02", "patient_id": "P007",
+      "measured_at": "2022-11-08T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 80, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT007_HR03", "patient_id": "P007",
+      "measured_at": "2023-07-25T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 84, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT007_HR04", "patient_id": "P007",
+      "measured_at": "2025-02-10T10:30:00Z", "ref_visit_id": "V007_001",
+      "type": "heart_rate", "value": 88, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT007_HR05", "patient_id": "P007",
+      "measured_at": "2024-05-14T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 82, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT007_SPO01", "patient_id": "P007",
+      "measured_at": "2022-11-08T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 93, "unit": "%"
+    },
+    {
+      "vital_id": "VT007_SPO02", "patient_id": "P007",
+      "measured_at": "2024-05-14T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 94, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [
+    {
+      "imaging_study_id": "IMG007_001", "patient_id": "P007",
+      "modality": "X-ray", "body_site": "chest",
+      "performed_at": "2025-02-10T11:00:00Z",
+      "ref_visit_id": "V007_001",
+      "ref_order_id": null,
+      "report_summary": "Hyperinflated lung fields bilaterally. Flattened hemidiaphragms. No consolidation. No pneumothorax.",
+      "document_ids": []
+    }
+  ],
+  "procedures": [],
+  "documents": []
+}

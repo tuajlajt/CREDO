@@ -1,0 +1,79 @@
+# ── Patient data — NEVER commit ──────────────────────────────────────────────
+data/raw/
+data/deidentified/
+# Synthetic data is safe to commit if it contains no real patient data
+# data/synthetic/   (committed — synthetic only)
+
+# ── Drug databases (large binary files) ──────────────────────────────────────
+data/drug_databases/*.db
+data/drug_databases/*.sqlite
+
+# ── Demo database (committed — synthetic patients only, no real PHI) ──────────
+# data/synthetic/credo_demo.db  ← explicitly allowed (negation below)
+*.db
+*.sqlite
+!data/synthetic/credo_demo.db
+
+# ── Model weights (gitignored — download separately) ─────────────────────────
+models/
+weights/
+
+# ── Credentials ──────────────────────────────────────────────────────────────
+.env
+*.pem
+*.key
+service-account*.json
+credentials*.json
+
+# ── Logs (audit.log is append-only — keep locally, not in git) ───────────────
+logs/
+*.log
+
+# ── Python ───────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+env/
+.python-version
+
+# ── Notebooks ────────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+# Note: .ipynb files ARE committed (they are documentation)
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── IDE ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Docker ───────────────────────────────────────────────────────────────────
+# docker-compose.yml is committed
+# .env is NOT committed
+certs/
+
+# ── Test artifacts ────────────────────────────────────────────────────────────
+.coverage
+htmlcov/
+
+# ── Node / Vite ───────────────────────────────────────────────────────────────
+node_modules/
+src/ui/static/dist/
+.vite/
+
+# ── Claude Code internals ──────────────────────────────────────────────────────
+.claude/
+claude/
+
+# ── Draft / scratch files (not production code) ───────────────────────────────
+src/drafts/

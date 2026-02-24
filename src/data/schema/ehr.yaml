@@ -1,0 +1,882 @@
+# ============================================================================
+# Patient EHR Schema  —  JSON Schema draft 2020-12
+#
+# Design principles
+#   - One record per patient (top-level object)
+#   - All clinical lists are top-level arrays; linked via IDs from visits
+#   - Prescriptions are the source of truth for medications;
+#     clinical_summary.active_medications is a derived snapshot
+#   - Every timestamp is ISO 8601 UTC (YYYY-MM-DDTHH:MM:SSZ)
+#   - Every date is ISO 8601 (YYYY-MM-DD)
+#   - Commented-out sections are NOT in use for the current demo but are
+#     retained here as the intended full schema
+# ============================================================================
+$schema: "https://json-schema.org/draft/2020-12/schema"
+$id: "ehr/patient_ehr.schema.yaml"
+title: "PatientEHR"
+type: object
+additionalProperties: false
+required:
+  - ehr
+  - patient_profile
+  - clinical_summary
+  - visits
+
+properties:
+
+  # --------------------------------------------------------------------------
+  # EHR metadata
+  # --------------------------------------------------------------------------
+  ehr:
+    type: object
+    additionalProperties: false
+    required: [schema_version]
+    properties:
+      schema_version:
+        type: string
+        pattern: "^\\d+\\.\\d+$"
+
+  # --------------------------------------------------------------------------
+  # Patient profile  —  static / slowly-changing patient data
+  # --------------------------------------------------------------------------
+  patient_profile:
+    type: object
+    additionalProperties: false
+    required:
+      - patient_id
+      - identifiers
+      - demographics
+      # contacts is defined below but commented out — not required for demo
+      - administrative
+      - static_measurements
+    properties:
+
+      patient_id:
+        type: string
+        minLength: 1
+
+      identifiers:
+        type: array
+        minItems: 1
+        items:
+          type: object
+          additionalProperties: false
+          required: [system, value]
+          properties:
+            system:
+              type: string
+              minLength: 1
+              description: "e.g. national_id, insurance_id, passport, internal_mrn"
+            value:
+              type: string
+              minLength: 1
+            issuer:
+              type: [string, "null"]
+            active:
+              type: boolean
+              default: true
+
+      demographics:
+        type: object
+        additionalProperties: false
+        required:
+          - name
+          - date_of_birth
+          - sex_at_birth
+          - blood_type
+        properties:
+          name:
+            type: object
+            additionalProperties: false
+            required: [first_name, last_name]
+            properties:
+              first_name:
+                type: string
+                minLength: 1
+              middle_name:
+                type: [string, "null"]
+              last_name:
+                type: string
+                minLength: 1
+              # FHIR-style name fields (commented out — use first/middle/last above)
+              # given:
+              #   type: array
+              #   minItems: 1
+              #   items: { type: string }
+              #   description: "Array of given names; first element is the primary given name"
+              # family:
+              #   type: string
+              #   minLength: 1
+              # prefix:
+              #   type: [array, "null"]
+              #   items: { type: string }
+              #   description: "Honorific prefix e.g. Dr., Mr., Mrs., Prof."
+              # suffix:
+              #   type: [array, "null"]
+              #   items: { type: string }
+              #   description: "Name suffix e.g. Jr., Sr., PhD, MD"
+
+          date_of_birth:
+            type: string
+            format: date
+
+          sex_at_birth:
+            type: string
+            enum: [female, male, intersex, unknown]
+
+          # gender_identity:
+          #   type: [string, "null"]
+
+          blood_type:
+            type: string
+            enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", unknown]
+
+          # preferred_language:
+          #   type: [string, "null"]
+          # nationality:
+          #   type: [string, "null"]
+          # marital_status:
+          #   type: [string, "null"]
+          # deceased:
+          #   type: boolean
+          #   default: false
+          # deceased_date:
+          #   type: [string, "null"]
+          #   format: date
+
+      # contacts: currently not required — uncomment definition AND add to required above
+      #   to enable
+      # contacts:
+      #   type: object
+      #   additionalProperties: false
+      #   required: [address, phone, email, emergency_contacts]
+      #   properties:
+      #     address:
+      #       type: object
+      #       additionalProperties: false
+      #       required: [country]
+      #       properties:
+      #         country: { type: string, minLength: 2 }
+      #         city: { type: [string, "null"] }
+      #         line1: { type: [string, "null"] }
+      #         line2: { type: [string, "null"] }
+      #         postal_code: { type: [string, "null"] }
+      #     phone:
+      #       type: [string, "null"]
+      #     email:
+      #       type: [string, "null"]
+      #     emergency_contacts:
+      #       type: array
+      #       minItems: 0
+      #       items:
+      #         type: object
+      #         additionalProperties: false
+      #         required: [name, relation]
+      #         properties:
+      #           name: { type: string, minLength: 1 }
+      #           relation: { type: string, minLength: 1 }
+      #           phone: { type: [string, "null"] }
+      #           email: { type: [string, "null"] }
+
+      administrative:
+        type: object
+        additionalProperties: false
+        required: [insurance, consents, preferences]
+        properties:
+          insurance:
+            type: array
+            items:
+              type: object
+              additionalProperties: false
+              required: [policy_id, payer]
+              properties:
+                policy_id: { type: string, minLength: 1 }
+                payer: { type: string, minLength: 1 }
+                plan_name: { type: [string, "null"] }
+                valid_from: { type: [string, "null"], format: date }
+                valid_to: { type: [string, "null"], format: date }
+                coverage_type: { type: [string, "null"] }
+                member_id: { type: [string, "null"] }
+          consents:
+            type: object
+            additionalProperties: false
+            properties:
+              data_sharing:
+                type: string
+                enum: [allowed, restricted, denied, unknown]
+              research:
+                type: string
+                enum: [allowed, denied, unknown]
+              last_updated:
+                type: [string, "null"]
+                format: date-time
+          preferences:
+            type: object
+            additionalProperties: false
+            properties:
+              communication:
+                type: string
+                enum: [phone, email, portal, sms, unknown]
+              # preferred_pharmacy:
+              #   type: [string, "null"]
+              # advance_directives:
+              #   type: [string, "null"]
+              dnr_status:
+                type: string
+                enum: ["yes", "no", unknown]
+
+      # care_team:
+      #   type: object
+      #   additionalProperties: false
+      #   required: [primary_care_provider]
+      #   properties:
+      #     primary_care_provider:
+      #       type: object
+      #       additionalProperties: false
+      #       required: [clinician_id, name]
+      #       properties:
+      #         clinician_id: { type: string, minLength: 1 }
+      #         name: { type: string, minLength: 1 }
+      #         specialty: { type: [string, "null"] }
+      #         organization: { type: [string, "null"] }
+      #     specialists:
+      #       type: array
+      #       items:
+      #         type: object
+      #         additionalProperties: false
+      #         required: [clinician_id, name]
+      #         properties:
+      #           clinician_id: { type: string, minLength: 1 }
+      #           name: { type: string, minLength: 1 }
+      #           specialty: { type: [string, "null"] }
+      #           organization: { type: [string, "null"] }
+
+      static_measurements:
+        type: object
+        additionalProperties: false
+        properties:
+          height_cm:
+            type: [number, "null"]
+            minimum: 30
+            maximum: 260
+            description: "Height is a static measurement. Current weight is recorded in vitals_history."
+
+      last_visit:
+        type: [object, "null"]
+        additionalProperties: false
+        required: [date, visit_id]
+        properties:
+          date: { type: string, format: date }
+          visit_id: { type: string, minLength: 1 }
+
+  # --------------------------------------------------------------------------
+  # Clinical summary  —  current snapshot, derived + maintained by the system
+  # --------------------------------------------------------------------------
+  clinical_summary:
+    type: object
+    additionalProperties: false
+    required: [updated_at, allergies, chronic_conditions]
+    properties:
+
+      updated_at:
+        type: string
+        format: date-time
+
+      allergies:
+        type: array
+        items:
+          $ref: "#/$defs/allergy"
+
+      chronic_conditions:
+        type: array
+        items:
+          $ref: "#/$defs/condition"
+
+      active_medications:
+        # Snapshot derived from the prescriptions array.
+        # Source of truth for medication details is the full prescription record.
+        type: array
+        items:
+          $ref: "#/$defs/medication_summary"
+
+      risk_flags:
+        # Pre-computed clinical risk signals maintained by the system.
+        # These are NOT diagnoses — they are system-generated alerts about potential
+        # clinical concerns derived from the patient's current data profile. Examples:
+        #   drug_interaction : known interaction between two or more active medications
+        #   allergy_risk     : an active medication known to cross-react with a documented allergy
+        #   cardiovascular   : elevated calculated cardiovascular risk (e.g. QRISK > threshold)
+        #   falls            : elderly patient on CNS-active or antihypertensive medications
+        #   polypharmacy     : ≥5 regular medications (increased DDI and adherence risk)
+        #   metabolic        : multiple medications with hyperglycaemic or metabolic side effects
+        #   infection_risk   : immunosuppressant use, live vaccine contraindication
+        type: array
+        items:
+          type: object
+          additionalProperties: false
+          required: [category, type, severity, message]
+          properties:
+            category:
+              type: string
+              enum:
+                - drug_interaction
+                - allergy_risk
+                - cardiovascular
+                - falls
+                - polypharmacy
+                - metabolic
+                - infection_risk
+                - other
+            type:
+              type: string
+              minLength: 1
+              description: "Machine-readable sub-type e.g. 'ddi_warfarin_aspirin', 'polypharmacy_5plus'"
+            severity:
+              type: string
+              enum: [low, medium, high, critical]
+            message:
+              type: string
+              minLength: 1
+              description: "Human-readable explanation shown to the clinician"
+            source:
+              type: [string, "null"]
+              description: "System or agent that generated this flag e.g. 'ddi_engine', 'risk_calculator'"
+            generated_at:
+              type: [string, "null"]
+              format: date-time
+
+  # --------------------------------------------------------------------------
+  # Family history
+  # --------------------------------------------------------------------------
+  family_history:
+    type: array
+    items:
+      type: object
+      additionalProperties: false
+      required: [relation, condition]
+      properties:
+        relation:
+          type: string
+          enum: [mother, father, sibling, child, grandparent, aunt_uncle, cousin, other, unknown]
+        condition:
+          $ref: "#/$defs/condition"
+        age_of_onset:
+          type: [integer, "null"]
+          minimum: 0
+          maximum: 130
+
+  # --------------------------------------------------------------------------
+  # Lifestyle
+  # --------------------------------------------------------------------------
+  lifestyle:
+    type: object
+    additionalProperties: false
+    properties:
+      smoking_status:
+        type: string
+        enum: ["yes", "no", former, unknown]
+      diet_pattern:
+        type: string
+        enum: [vegan, vegetarian, keto, raw, omnivore, other, unknown]
+      alcohol:
+        type: object
+        additionalProperties: false
+        properties:
+          units_per_week: { type: [number, "null"], minimum: 0 }
+          units_per_month: { type: [number, "null"], minimum: 0 }
+      physical_activity:
+        type: object
+        additionalProperties: false
+        properties:
+          moderate_to_high_sessions_per_week:
+            type: [integer, "null"]
+            minimum: 0
+            maximum: 21
+
+  # --------------------------------------------------------------------------
+  # Clinical encounter lists  —  all linked from visits via IDs
+  # --------------------------------------------------------------------------
+  visits:
+    type: array
+    items:
+      $ref: "#/$defs/visit"
+
+  prescriptions:
+    type: array
+    items:
+      $ref: "#/$defs/prescription"
+
+  vitals_history:
+    type: array
+    items:
+      $ref: "#/$defs/vitals"
+
+  orders:
+    type: array
+    items:
+      $ref: "#/$defs/order"
+
+  imaging_studies:
+    type: array
+    items:
+      $ref: "#/$defs/imaging_study"
+
+  procedures:
+    type: array
+    items:
+      $ref: "#/$defs/procedure"
+
+  documents:
+    type: array
+    items:
+      $ref: "#/$defs/document"
+
+# =============================================================================
+# SHARED TYPE DEFINITIONS
+# =============================================================================
+$defs:
+
+  # ---------------------------------------------------------------------------
+  condition:
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [code_system, code, display, status]
+    properties:
+      code_system: { type: string, minLength: 1 }
+      code: { type: string, minLength: 1 }
+      display: { type: string, minLength: 1 }
+      status: { type: string, enum: [active, inactive, resolved, unknown] }
+      onset_date: { type: [string, "null"], format: date }
+      certainty: { type: string, enum: [confirmed, suspected, unknown] }
+
+  # ---------------------------------------------------------------------------
+  allergy:
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [substance, type, severity, exposure_route]
+    properties:
+      substance: { type: string, minLength: 1 }
+      type: { type: string, enum: [allergy, intolerance] }
+      severity: { type: string, enum: [mild, moderate, severe, unknown] }
+      exposure_route:
+        type: string
+        enum: [ingested, inhaled, contact, injected, unknown]
+      reactions:
+        type: array
+        items: { type: string }
+      certainty:
+        type: string
+        enum: [confirmed, suspected, unknown]
+      last_reviewed:
+        type: [string, "null"]
+        format: date
+
+  # ---------------------------------------------------------------------------
+  medication_summary:
+  # Snapshot in clinical_summary.active_medications. Derived from prescriptions.
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [inn, dose, frequency, status, therapy_duration, administration_pattern]
+    properties:
+      medicine_name:
+        type: [string, "null"]
+        description: "Brand or trade name. May be null if only INN is known."
+      inn:
+        type: string
+        minLength: 1
+        # INN = International Nonproprietary Name — the WHO-assigned generic/scientific
+        # drug name (e.g. 'atorvastatin', not 'Lipitor'). INNs are used for DDI checking
+        # and cross-referencing drug interaction databases, because trade names vary by
+        # country and manufacturer while INNs are universal.
+      atc:
+        type: [string, "null"]
+        # ATC = Anatomical Therapeutic Chemical classification code (WHO system).
+        # A 7-character hierarchical code, example: C10AA05 = atorvastatin
+        #   Level 1 (C)      : anatomical main group  — Cardiovascular system
+        #   Level 2 (C10)    : therapeutic subgroup   — Lipid modifying agents
+        #   Level 3 (C10A)   : pharmacological subgroup — Lipid modifying agents, plain
+        #   Level 4 (C10AA)  : chemical subgroup      — HMG CoA reductase inhibitors (statins)
+        #   Level 5 (C10AA05): chemical substance     — Atorvastatin
+        # Useful for grouping drugs by mechanism and identifying class-level interactions.
+      dose: { type: string, minLength: 1 }
+      frequency: { type: string, minLength: 1 }
+      route: { type: [string, "null"] }
+      status:
+        type: string
+        enum: [active, paused, stopped]
+      therapy_duration:
+        type: string
+        enum: [long_term, short_term, unknown]
+        # long_term  : indefinite or chronic therapy — continues until the condition
+        #              resolves or the clinician explicitly stops it
+        #              (e.g. antihypertensives, statins, thyroid hormone, anticoagulants)
+        # short_term : time-limited course with a defined end date
+        #              (e.g. antibiotics, corticosteroid taper, post-op analgesia)
+        # unknown    : duration not recorded or not yet specified
+      administration_pattern:
+        type: string
+        enum: [regular, as_needed, unknown]
+        # regular   : must be taken consistently on a fixed schedule regardless of symptoms
+        #             (e.g. daily antihypertensive, twice-daily metformin, morning levothyroxine)
+        # as_needed : PRN — from Latin 'pro re nata' meaning 'as the situation demands'.
+        #             Taken ONLY when a specific symptom or trigger condition occurs, not
+        #             on a fixed schedule. (e.g. salbutamol for breathlessness, paracetamol
+        #             for pain, lorazepam for panic attacks, GTN spray for angina)
+        # unknown   : schedule not specified
+      prn_condition:
+        type: [string, "null"]
+        description: >
+          Human-readable trigger for as_needed medications.
+          Only relevant when administration_pattern = as_needed.
+          e.g. 'for pain >= 5/10', 'for acute breathlessness', 'for panic attacks'.
+          Set to null for regularly scheduled medications.
+      ref_prescription_id:
+        type: [string, "null"]
+        description: "ID of the prescription record this summary was derived from."
+
+  # ---------------------------------------------------------------------------
+  visit:
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required:
+      - visit_id
+      - patient_id
+      - clinician_id
+      - visit_date
+      - type
+      - patient_reported_reason
+      - clinician_notes
+      - diagnoses
+      - prescription_ids
+    properties:
+      visit_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      clinician_id: { type: string, minLength: 1 }
+      visit_date: { type: string, format: date }
+      type:
+        type: string
+        enum:
+          - outpatient
+          - inpatient
+          - er
+          - telehealth
+          - urgent_care
+          - diagnostic_imaging
+          - lab_visit
+          - external_specialist
+          - other
+      patient_reported_reason:
+        type: string
+        minLength: 1
+      clinician_notes:
+        # Clinical narrative for this visit.
+        # For dictated visits processed by MedASR: the SOAP-structured note is stored here
+        # (raw transcript is kept separately in the audio record or pipeline output).
+        # The diagnoses array below holds the structured ICD codes extracted from this note
+        # after clinician review and approval.
+        type: string
+        minLength: 1
+      diagnoses:
+        # Structured ICD-10 codes for this visit. For dictated visits processed by
+        # MedASR + MedGemma, this is populated from the suggested ICD codes in the
+        # SOAP note output after clinician review and approval.
+        type: array
+        items: { $ref: "#/$defs/condition" }
+      prescription_ids:
+        type: array
+        items: { type: string, minLength: 1 }
+      linked:
+        type: object
+        additionalProperties: false
+        properties:
+          vital_ids:
+            type: array
+            items: { type: string }
+          order_ids:
+            type: array
+            items: { type: string }
+          procedure_ids:
+            type: array
+            items: { type: string }
+          document_ids:
+            type: array
+            items: { type: string }
+          imaging_study_ids:
+            type: array
+            items: { type: string }
+
+  # ---------------------------------------------------------------------------
+  prescription:
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required:
+      - prescription_id
+      - patient_id
+      - prescribed_date
+      - medicine_name
+      - inn
+      - dose
+      - frequency
+      - therapy_duration
+      - prn
+      - ref
+    properties:
+      prescription_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      prescribed_date: { type: string, format: date }
+      medicine_name: { type: string, minLength: 1 }
+      inn:
+        type: string
+        minLength: 1
+        # INN = International Nonproprietary Name — see medication_summary.inn above.
+      atc:
+        type: [string, "null"]
+        # ATC = Anatomical Therapeutic Chemical classification code — see medication_summary.atc above.
+      dose: { type: string, minLength: 1 }
+      frequency: { type: string, minLength: 1 }
+      route: { type: [string, "null"] }
+      therapy_duration:
+        type: string
+        enum: [long_term, short_term, unknown]
+        # long_term / short_term / unknown — see medication_summary.therapy_duration above.
+      prn:
+        type: boolean
+        # PRN = pro re nata (Latin: 'as the situation demands') — as-needed medication.
+        # true  : patient takes this ONLY when a specific trigger condition occurs.
+        #         Requires prn_condition to document the trigger.
+        #         Also set max_per_day to cap daily use.
+        # false : medication is taken on a fixed schedule regardless of symptoms.
+      prn_condition:
+        type: [string, "null"]
+        # Clinical trigger for PRN medication — when should the patient take it?
+        # e.g. 'for pain >= 5/10', 'for breathlessness at rest or on minimal exertion',
+        #      'for panic attack symptoms'. Required when prn = true; null otherwise.
+      max_per_day:
+        type: [number, "null"]
+        minimum: 0
+        description: "Maximum doses/administrations per 24 hours. Mainly relevant for PRN medications."
+      indication:
+        type: [object, "null"]
+        additionalProperties: false
+        required: [code_system, code, display]
+        properties:
+          code_system: { type: string }
+          code: { type: string }
+          display: { type: string }
+      quantity:
+        type: [object, "null"]
+        additionalProperties: false
+        required: [amount, unit]
+        properties:
+          amount: { type: number, minimum: 0 }
+          unit: { type: string, minLength: 1 }
+      days_supply: { type: [integer, "null"], minimum: 0 }
+      expected_end_date: { type: [string, "null"], format: date }
+      ref:
+        # Back-reference to the event that generated this prescription.
+        # type = visit           : written during a clinical encounter (most common).
+        # type = renewal_request : renewed without a face-to-face visit
+        #                          (e.g. repeat prescription via portal or phone).
+        type: object
+        additionalProperties: false
+        required: [type, id]
+        properties:
+          type: { type: string, enum: [visit, renewal_request] }
+          id: { type: string, minLength: 1 }
+
+  # ---------------------------------------------------------------------------
+  vitals:
+  # Each record represents a SINGLE vital sign measurement at a point in time.
+  # Set the type field, then fill the corresponding value fields:
+  #   blood_pressure → set systolic_mmHg + diastolic_mmHg; leave value + unit null
+  #   all other types → set value + unit; leave systolic/diastolic null
+  # Conditional validation (if/then/else below) enforces this at schema level.
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [vital_id, patient_id, measured_at, type]
+    properties:
+      vital_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      measured_at: { type: string, format: date-time }
+      ref_visit_id: { type: [string, "null"] }
+      type:
+        type: string
+        enum:
+          - blood_pressure    # → systolic_mmHg + diastolic_mmHg required
+          - weight            # → value (kg)    + unit required
+          - heart_rate        # → value (bpm)   + unit required
+          - temperature       # → value (°C)    + unit required
+          - spo2              # → value (%)     + unit required
+          - respiratory_rate  # → value (/min)  + unit required
+          - height            # → value (cm)    + unit required
+          - bmi               # → value (kg/m²) + unit required
+          - blood_glucose     # → value (mmol/L or mg/dL) + unit — POCT glucose
+          - other             # → value + unit required
+      # Scalar measurement — used for all types except blood_pressure
+      value:
+        type: [number, "null"]
+        minimum: 0
+      unit:
+        type: [string, "null"]
+        description: "SI unit string e.g. 'kg', 'bpm', 'degC', '%', '/min', 'cm', 'mmol/L'"
+      # Blood pressure fields — only populated when type = blood_pressure
+      systolic_mmHg:
+        type: [number, "null"]
+        minimum: 0
+      diastolic_mmHg:
+        type: [number, "null"]
+        minimum: 0
+      # Optional reference range for clinical interpretation
+      ref_range:
+        type: [object, "null"]
+        additionalProperties: false
+        properties:
+          low: { type: [number, "null"] }
+          high: { type: [number, "null"] }
+          unit: { type: [string, "null"] }
+    # Require the correct value fields depending on measurement type
+    if:
+      required: [type]
+      properties:
+        type: { const: blood_pressure }
+    then:
+      required: [systolic_mmHg, diastolic_mmHg]
+      properties:
+        systolic_mmHg: { type: number, minimum: 0 }
+        diastolic_mmHg: { type: number, minimum: 0 }
+    else:
+      required: [value, unit]
+      properties:
+        value: { type: number, minimum: 0 }
+        unit: { type: string, minLength: 1 }
+
+  # ---------------------------------------------------------------------------
+  order:
+  # A physician's REQUEST for a lab test or imaging study.
+  # The order (request) is distinct from the result:
+  #   lab order → results appear as documents (type: lab_result)
+  #   imaging order → results appear as imaging_study records (linked via ref_order_id)
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [order_id, patient_id, ordered_at, category, test, status]
+    properties:
+      order_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      ordered_at: { type: string, format: date-time }
+      ref_visit_id: { type: [string, "null"] }
+      category:
+        type: string
+        enum: [lab, imaging, other]
+      test:
+        type: object
+        additionalProperties: false
+        required: [code_system, code, display]
+        properties:
+          code_system: { type: string }
+          code: { type: string }
+          display: { type: string }
+      status:
+        type: string
+        enum: [requested, scheduled, completed, cancelled]
+
+  # ---------------------------------------------------------------------------
+  imaging_study:
+  # The RESULT record of a completed imaging procedure.
+  # Relationship:  order (request)  ──ref_order_id──>  imaging_study (result)
+  # The order holds the physician's request and status tracking.
+  # The imaging_study holds modality, acquisition metadata, and report summary.
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [imaging_study_id, patient_id, modality, performed_at]
+    properties:
+      imaging_study_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      modality: { type: string, minLength: 1 }
+      body_site: { type: [string, "null"] }
+      performed_at: { type: string, format: date-time }
+      ref_visit_id: { type: [string, "null"] }
+      ref_order_id:
+        type: [string, "null"]
+        description: "ID of the order that generated this study. Null if no formal order was placed."
+      report_summary: { type: [string, "null"] }
+      document_ids:
+        type: array
+        items: { type: string }
+
+  # ---------------------------------------------------------------------------
+  procedure:
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [procedure_id, patient_id, performed_at, code_system, code, display]
+    properties:
+      procedure_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      performed_at: { type: string, format: date-time }
+      code_system: { type: string, minLength: 1 }
+      code: { type: string, minLength: 1 }
+      display: { type: string, minLength: 1 }
+      ref_visit_id: { type: [string, "null"] }
+
+  # ---------------------------------------------------------------------------
+  document:
+  # Any clinical document attached to the patient record.
+  # For lab results, set lab_category to classify the panel type.
+  # ---------------------------------------------------------------------------
+    type: object
+    additionalProperties: false
+    required: [document_id, patient_id, type, title, authored_date, file]
+    properties:
+      document_id: { type: string, minLength: 1 }
+      patient_id: { type: string, minLength: 1 }
+      type:
+        type: string
+        enum:
+          - lab_result
+          - imaging_report
+          - discharge_summary
+          - referral_letter
+          - consultation_note
+          - consent_form
+          - external_report
+          - vaccination_record
+          - operative_report
+          - other
+      lab_category:
+        # Classifies the laboratory panel type. Set only when type = lab_result;
+        # set to null for all other document types.
+        type: [string, "null"]
+        enum:
+          - hematology        # CBC, differential blood count, blood film
+          - biochemistry      # metabolic panel, LFTs, RFTs, electrolytes, CRP
+          - microbiology      # cultures, sensitivities, PCR, viral load
+          - serology          # antibody / antigen tests, immunology
+          - endocrinology     # hormones: TSH, T4, HbA1c, cortisol, insulin
+          - coagulation       # INR, APTT, PT, D-dimer, fibrinogen
+          - toxicology        # therapeutic drug levels, toxic screens, urine drug screen
+          - pathology         # histopathology, cytology, autopsy
+          - genetics          # genomic / molecular / pharmacogenomics results
+          - other
+          - null
+      title: { type: string, minLength: 1 }
+      authored_date: { type: string, format: date }
+      file:
+        type: object
+        additionalProperties: false
+        required: [filename, content_type, storage_ref]
+        properties:
+          filename: { type: string }
+          content_type:
+            type: string
+            enum: ["application/pdf"]
+          storage_ref: { type: string, minLength: 1 }
+          sha256: { type: [string, "null"] }
+      ref_visit_id: { type: [string, "null"] }

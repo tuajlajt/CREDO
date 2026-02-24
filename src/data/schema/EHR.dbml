@@ -1,0 +1,263 @@
+// Clean EHR schema (DATE everywhere)
+// TIMESTAMP only for measurements/results (vitals + lab results + imaging performed_at)
+
+Table patient_profile {
+  patient_id varchar [pk]
+
+  // Demographics
+  given_names text [not null]        // if you want true structure: separate table or JSON
+  family_name text [not null]
+  date_of_birth date [not null]
+  sex_at_birth varchar [not null]    // female|male|intersex|unknown
+  gender_identity text
+  blood_type varchar [not null]      // A+|A-|B+|B-|AB+|AB-|O+|O-|unknown
+  preferred_language text
+
+  // Contacts (minimal)
+  phone text
+  email text
+
+  // Static measurements
+  height_cm decimal
+
+  // Patient directory “card” support
+  last_visit_date date
+  last_visit_id varchar
+}
+
+Table clinician {
+  clinician_id varchar [pk]
+  name text [not null]
+  specialty text
+  organization text
+}
+
+Table lifestyle {
+  patient_id varchar [pk]
+  smoking_status varchar [not null]  // yes|no|former|unknown
+  diet_pattern varchar [not null]    // vegan|vegetarian|keto|raw|omnivore|other|unknown
+  alcohol_units_per_week decimal
+  alcohol_units_per_month decimal
+  activity_sessions_per_week int
+}
+
+Table allergy {
+  allergy_id varchar [pk]
+  patient_id varchar [not null]
+
+  substance text [not null]
+  type varchar [not null]            // allergy|intolerance
+  severity varchar [not null]        // mild|moderate|severe|unknown
+  exposure_route varchar [not null]  // ingested|inhaled|contact|injected|unknown
+
+  reactions text                     // JSON/text array
+  certainty varchar [not null]       // confirmed|suspected|unknown
+  last_reviewed date
+}
+
+Table chronic_condition {
+  condition_id varchar [pk]
+  patient_id varchar [not null]
+
+  code_system varchar [not null]     // ICD10|SNOMED|...
+  code varchar [not null]
+  display text [not null]
+  status varchar [not null]          // active|inactive|resolved|unknown
+  onset_date date
+  certainty varchar [not null]       // confirmed|suspected|unknown
+}
+
+Table family_history {
+  family_history_id varchar [pk]
+  patient_id varchar [not null]
+
+  relation varchar [not null]        // mother|father|sibling|child|...
+  code_system varchar [not null]
+  code varchar [not null]
+  display text [not null]
+  age_of_onset int
+}
+
+Table visit {
+  visit_id varchar [pk]
+  clinician_id varchar [not null]
+  patient_id varchar [not null]
+
+  visit_date date [not null]
+  visit_type varchar [not null]
+  // outpatient|inpatient|er|telehealth|urgent_care|diagnostic_imaging|lab_visit|external_specialist|other
+
+  patient_reported_reason text [not null]
+  clinician_notes text [not null]
+}
+
+Table visit_diagnosis {
+  visit_diagnosis_id varchar [pk]
+  visit_id varchar [not null]
+
+  code_system varchar [not null]
+  code varchar [not null]
+  display text [not null]
+  status varchar
+}
+
+Table prescription {
+  prescription_id varchar [pk]
+  patient_id varchar [not null]
+  prescribed_date date [not null]
+
+  medicine_name text [not null]      // product name
+  inn text [not null]
+  atc varchar
+
+  dose text [not null]               // "80 mg"
+  frequency varchar [not null]       // "once_daily", "every_8_hours", "as_needed"
+  route text
+
+  therapy_type varchar [not null]    // acute|chronic|unknown
+  prn boolean [not null]
+  prn_reason text
+  max_per_day decimal
+
+  indication_code_system varchar
+  indication_code varchar
+  indication_display text
+
+  quantity_amount decimal
+  quantity_unit text
+  days_supply int
+  expected_end_date date
+
+  ref_type varchar [not null]        // visit|renewal_request
+  ref_id varchar [not null]
+}
+
+// JUNCTION TABLE (hide this in the rendered view)
+Table visit_prescription {
+  id varchar [pk]
+  visit_id varchar [not null]
+  prescription_id varchar [not null]
+}
+
+Table vitals {
+  vital_id varchar [pk]
+  patient_id varchar [not null]
+
+  measured_at timestamp [not null]   // measurement moment
+  ref_visit_id varchar
+
+  weight_kg decimal
+  systolic_mmhg decimal
+  diastolic_mmhg decimal
+  heart_rate_bpm int
+  spo2_pct decimal
+  temperature_c decimal                // visit-context only — not shown in summary bar
+}
+
+Table order_entry {
+  order_id varchar [pk]
+  patient_id varchar [not null]
+  order_date date [not null]
+  ref_visit_id varchar
+
+  category varchar [not null]        // lab|imaging|other
+  test_code_system varchar [not null]
+  test_code varchar [not null]
+  test_display text [not null]
+  status varchar [not null]          // requested|scheduled|completed|cancelled
+}
+
+Table imaging_study {
+  imaging_study_id varchar [pk]
+  patient_id varchar [not null]
+
+  performed_at timestamp [not null]  // keep timestamp for performed measurement
+  ref_visit_id varchar
+  order_id varchar
+
+  modality varchar [not null]        // MRI|CT|US|XRAY
+  body_site text
+  report_summary text
+}
+
+// LAB RESULTS (timestamps allowed here)
+Table lab_result {
+  lab_result_id varchar [pk]
+  patient_id varchar [not null]
+
+  measured_at timestamp [not null]   // specimen collection or result time
+  ref_visit_id varchar
+  order_id varchar
+
+  test_code_system varchar [not null] // LOINC ideally
+  test_code varchar [not null]
+  test_display text [not null]
+
+  value text [not null]
+  unit text
+  reference_range text
+  abnormal_flag varchar              // high|low|critical|normal|unknown
+}
+
+Table procedure_entry {
+  procedure_id varchar [pk]
+  patient_id varchar [not null]
+
+  performed_date date [not null]     // DATE (per your rule)
+  ref_visit_id varchar
+
+  code_system varchar [not null]     // CPT|SNOMED|...
+  code varchar [not null]
+  display text [not null]
+  outcome text
+}
+
+Table document {
+  document_id varchar [pk]
+  patient_id varchar [not null]
+
+  authored_date date [not null]
+  ref_visit_id varchar
+
+  doc_type varchar [not null]        // lab_report_pdf|imaging_report_pdf|other
+  title text [not null]
+
+  filename text [not null]
+  content_type varchar [not null]    // application/pdf
+  storage_ref text [not null]        // URI to object store
+  sha256 varchar
+}
+
+// -------------------- Relationships --------------------
+Ref: lifestyle.patient_id > patient_profile.patient_id
+Ref: allergy.patient_id > patient_profile.patient_id
+Ref: chronic_condition.patient_id > patient_profile.patient_id
+Ref: family_history.patient_id > patient_profile.patient_id
+
+Ref: visit.patient_id > patient_profile.patient_id
+Ref: visit.clinician_id > clinician.clinician_id
+Ref: visit_diagnosis.visit_id > visit.visit_id
+
+Ref: prescription.patient_id > patient_profile.patient_id
+Ref: visit_prescription.visit_id > visit.visit_id
+Ref: visit_prescription.prescription_id > prescription.prescription_id
+
+Ref: vitals.patient_id > patient_profile.patient_id
+Ref: vitals.ref_visit_id > visit.visit_id
+
+Ref: order_entry.patient_id > patient_profile.patient_id
+Ref: order_entry.ref_visit_id > visit.visit_id
+
+Ref: imaging_study.patient_id > patient_profile.patient_id
+Ref: imaging_study.ref_visit_id > visit.visit_id
+Ref: imaging_study.order_id > order_entry.order_id
+
+Ref: lab_result.patient_id > patient_profile.patient_id
+Ref: lab_result.ref_visit_id > visit.visit_id
+Ref: lab_result.order_id > order_entry.order_id
+
+Ref: procedure_entry.patient_id > patient_profile.patient_id
+Ref: procedure_entry.ref_visit_id > visit.visit_id
+
+Ref: document.patient_id > patient_profile.patient_id
+Ref: document.ref_visit_id > visit.visit_id

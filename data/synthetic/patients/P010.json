@@ -1,0 +1,442 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P010",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100010", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Margaret", "middle_name": "Anne", "last_name": "O'Brien" },
+      "date_of_birth": "1942-02-01",
+      "sex_at_birth": "female",
+      "blood_type": "unknown"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-NHS-010", "payer": "NHS", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "denied" },
+      "preferences": { "communication": "phone", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 155 },
+    "last_visit": { "date": "2025-02-12", "visit_id": "V010_002" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-02-12T10:00:00Z",
+    "allergies": [
+      {
+        "substance": "codeine",
+        "type": "intolerance",
+        "severity": "moderate",
+        "exposure_route": "ingested",
+        "reactions": ["nausea", "severe constipation", "confusion"],
+        "certainty": "confirmed",
+        "last_reviewed": "2024-09-01"
+      }
+    ],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "N18.3",
+        "display": "Chronic kidney disease, stage 3",
+        "status": "active", "onset_date": "2020-06-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential (primary) hypertension",
+        "status": "active", "onset_date": "2005-01-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications",
+        "status": "active", "onset_date": "2012-04-10", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I50.9",
+        "display": "Heart failure, unspecified",
+        "status": "active", "onset_date": "2021-09-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "M81.0",
+        "display": "Age-related osteoporosis without current pathological fracture",
+        "status": "active", "onset_date": "2019-05-15", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Norvasc",
+        "inn": "amlodipine",
+        "atc": "C08CA01",
+        "dose": "10 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_001"
+      },
+      {
+        "medicine_name": "Ramipril",
+        "inn": "ramipril",
+        "atc": "C09AA05",
+        "dose": "2.5 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_002"
+      },
+      {
+        "medicine_name": "Furosemide",
+        "inn": "furosemide",
+        "atc": "C03CA01",
+        "dose": "40 mg",
+        "frequency": "once daily in the morning",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_003"
+      },
+      {
+        "medicine_name": "Simvastatin",
+        "inn": "simvastatin",
+        "atc": "C10AA01",
+        "dose": "20 mg",
+        "frequency": "once daily at night",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_004"
+      },
+      {
+        "medicine_name": "Aspirin",
+        "inn": "aspirin",
+        "atc": "B01AC06",
+        "dose": "75 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_005"
+      },
+      {
+        "medicine_name": "Omeprazole",
+        "inn": "omeprazole",
+        "atc": "A02BC01",
+        "dose": "20 mg",
+        "frequency": "once daily before breakfast",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX010_006"
+      }
+    ],
+    "risk_flags": [
+      {
+        "category": "polypharmacy",
+        "type": "polypharmacy_6plus",
+        "severity": "high",
+        "message": "6 regular medications in an 82-year-old with CKD stage 3. High DDI and renal excretion risk. Annual comprehensive medicines review required.",
+        "source": "ddi_engine",
+        "generated_at": "2025-02-12T10:00:00Z"
+      },
+      {
+        "category": "falls",
+        "type": "falls_risk_polypharmacy_elderly",
+        "severity": "high",
+        "message": "Elderly female on amlodipine, ramipril, furosemide — orthostatic hypotension and falls risk elevated. Assess lying/standing BP.",
+        "source": "risk_calculator",
+        "generated_at": "2025-02-12T10:00:00Z"
+      },
+      {
+        "category": "metabolic",
+        "type": "ckd_dose_adjustment_required",
+        "severity": "medium",
+        "message": "CKD stage 3 (eGFR 35-45). Ramipril and furosemide doses are reduced. Avoid NSAIDs. Monitor eGFR and electrolytes regularly.",
+        "source": "risk_calculator",
+        "generated_at": "2025-02-12T10:00:00Z"
+      },
+      {
+        "category": "drug_interaction",
+        "type": "ddi_aspirin_anticoagulant_risk",
+        "severity": "medium",
+        "message": "Aspirin with ramipril in CKD: monitor renal function. Omeprazole added for GI protection.",
+        "source": "ddi_engine",
+        "generated_at": "2025-02-12T10:00:00Z"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential hypertension",
+        "status": "inactive", "certainty": "confirmed"
+      }
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "N18.3",
+        "display": "Chronic kidney disease, stage 3",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 75
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "former",
+    "alcohol": { "units_per_week": 0 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 0 },
+    "diet_pattern": "low_carb"
+  },
+  "visits": [
+    {
+      "visit_id": "V010_001",
+      "patient_id": "P010",
+      "clinician_id": "CLN001",
+      "visit_date": "2024-09-01",
+      "type": "outpatient",
+      "patient_reported_reason": "Routine chronic disease review and medication check",
+      "clinician_notes": "Subjective: 82-year-old female with multiple chronic conditions. Reports worsening ankle oedema over past 2 weeks. On furosemide 40 mg OD. Adherent to medications. No chest pain. No dizziness on standing noted recently.\n\nObjective: BP 148/90 mmHg, HR 78 bpm, Weight 71 kg (up 2 kg since last visit 3 months ago). SpO2 95% on RA. Pitting oedema both ankles ++. Chest: mild basal creps. eGFR 38 mL/min/1.73m2. Potassium 4.1 mmol/L.\n\nAssessment: CHF decompensation — likely fluid overload on furosemide. Hypertension not at target. CKD 3 stable.\n\nPlan: Increase fluid monitoring. Increase furosemide temporarily to 80 mg OD for 1 week then reduce to 40 mg. BP review — consider amlodipine up-titration. Annual medicines review referral.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "I50.9",
+          "display": "Heart failure, unspecified",
+          "status": "active", "certainty": "confirmed"
+        },
+        {
+          "code_system": "ICD-10", "code": "N18.3",
+          "display": "Chronic kidney disease, stage 3",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": [],
+      "linked": {
+        "vital_ids": ["VT010_001", "VT010_002", "VT010_HR03", "VT010_SPO01"],
+        "order_ids": ["ORD010_001"],
+        "procedure_ids": [],
+        "document_ids": ["DOC010_001"],
+        "imaging_study_ids": []
+      }
+    },
+    {
+      "visit_id": "V010_002",
+      "patient_id": "P010",
+      "clinician_id": "CLN001",
+      "visit_date": "2025-02-12",
+      "type": "outpatient",
+      "patient_reported_reason": "Follow-up — oedema and blood pressure",
+      "clinician_notes": "Subjective: Improvement in ankle oedema after furosemide increase. Now back on 40 mg. BP still slightly elevated. No dizziness. Weight down 1.5 kg.\n\nObjective: BP 142/86 mmHg, HR 76 bpm, Weight 69.5 kg. Mild ankle oedema +. eGFR 37 mL/min (stable). Potassium 4.0 mmol/L.\n\nAssessment: CHF improving. BP partially controlled. CKD 3 stable.\n\nPlan: Increase amlodipine to 10 mg. Continue furosemide 40 mg. Annual review all medications in context of CKD. Bone health review for osteoporosis — consider calcium/D3 supplement (check vitamin D first).",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "I10",
+          "display": "Essential (primary) hypertension",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX010_001"],
+      "linked": {
+        "vital_ids": ["VT010_003", "VT010_HR05", "VT010_W05", "VT010_SPO03"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": ["DOC010_002"],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX010_001", "patient_id": "P010",
+      "prescribed_date": "2025-02-12", "medicine_name": "Norvasc",
+      "inn": "amlodipine", "atc": "C08CA01",
+      "dose": "10 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I10", "display": "Essential hypertension" },
+      "ref": { "type": "visit", "id": "V010_002" }
+    },
+    {
+      "prescription_id": "RX010_002", "patient_id": "P010",
+      "prescribed_date": "2021-09-01", "medicine_name": "Ramipril",
+      "inn": "ramipril", "atc": "C09AA05",
+      "dose": "2.5 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I50.9", "display": "Heart failure — ACE inhibitor, CKD-adjusted dose" },
+      "ref": { "type": "visit", "id": "V010_001" }
+    },
+    {
+      "prescription_id": "RX010_003", "patient_id": "P010",
+      "prescribed_date": "2021-09-01", "medicine_name": "Furosemide",
+      "inn": "furosemide", "atc": "C03CA01",
+      "dose": "40 mg", "frequency": "once daily in the morning",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I50.9", "display": "Heart failure — loop diuretic" },
+      "ref": { "type": "visit", "id": "V010_001" }
+    },
+    {
+      "prescription_id": "RX010_004", "patient_id": "P010",
+      "prescribed_date": "2012-04-10", "medicine_name": "Simvastatin",
+      "inn": "simvastatin", "atc": "C10AA01",
+      "dose": "20 mg", "frequency": "once daily at night",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "E78.5", "display": "Hyperlipidaemia" },
+      "ref": { "type": "visit", "id": "V010_001" }
+    },
+    {
+      "prescription_id": "RX010_005", "patient_id": "P010",
+      "prescribed_date": "2005-01-01", "medicine_name": "Aspirin",
+      "inn": "aspirin", "atc": "B01AC06",
+      "dose": "75 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "Z82.49", "display": "Cardiovascular risk reduction" },
+      "ref": { "type": "visit", "id": "V010_001" }
+    },
+    {
+      "prescription_id": "RX010_006", "patient_id": "P010",
+      "prescribed_date": "2021-09-01", "medicine_name": "Omeprazole",
+      "inn": "omeprazole", "atc": "A02BC01",
+      "dose": "20 mg", "frequency": "once daily before breakfast",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "K25.9", "display": "GI protection with aspirin use" },
+      "ref": { "type": "visit", "id": "V010_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT010_001", "patient_id": "P010",
+      "measured_at": "2024-09-01T09:00:00Z", "ref_visit_id": "V010_001",
+      "type": "blood_pressure", "systolic_mmHg": 148, "diastolic_mmHg": 90
+    },
+    {
+      "vital_id": "VT010_002", "patient_id": "P010",
+      "measured_at": "2024-09-01T09:00:00Z", "ref_visit_id": "V010_001",
+      "type": "weight", "value": 71, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_003", "patient_id": "P010",
+      "measured_at": "2025-02-12T09:30:00Z", "ref_visit_id": "V010_002",
+      "type": "blood_pressure", "systolic_mmHg": 142, "diastolic_mmHg": 86
+    },
+    {
+      "vital_id": "VT010_W01", "patient_id": "P010",
+      "measured_at": "2022-01-18T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 68.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_W02", "patient_id": "P010",
+      "measured_at": "2022-09-12T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 69.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_W03", "patient_id": "P010",
+      "measured_at": "2023-05-30T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 69.8, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_W04", "patient_id": "P010",
+      "measured_at": "2024-01-10T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 70.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_W05", "patient_id": "P010",
+      "measured_at": "2025-02-12T09:30:00Z", "ref_visit_id": "V010_002",
+      "type": "weight", "value": 69.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT010_HR01", "patient_id": "P010",
+      "measured_at": "2022-01-18T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 80, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT010_HR02", "patient_id": "P010",
+      "measured_at": "2022-09-12T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 82, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT010_HR03", "patient_id": "P010",
+      "measured_at": "2024-09-01T09:00:00Z", "ref_visit_id": "V010_001",
+      "type": "heart_rate", "value": 78, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT010_HR04", "patient_id": "P010",
+      "measured_at": "2023-05-30T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 80, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT010_HR05", "patient_id": "P010",
+      "measured_at": "2025-02-12T09:30:00Z", "ref_visit_id": "V010_002",
+      "type": "heart_rate", "value": 76, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT010_SPO01", "patient_id": "P010",
+      "measured_at": "2024-09-01T09:00:00Z", "ref_visit_id": "V010_001",
+      "type": "spo2", "value": 95, "unit": "%"
+    },
+    {
+      "vital_id": "VT010_SPO02", "patient_id": "P010",
+      "measured_at": "2022-09-12T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 95, "unit": "%"
+    },
+    {
+      "vital_id": "VT010_SPO03", "patient_id": "P010",
+      "measured_at": "2025-02-12T09:30:00Z", "ref_visit_id": "V010_002",
+      "type": "spo2", "value": 96, "unit": "%"
+    }
+  ],
+  "orders": [
+    {
+      "order_id": "ORD010_001", "patient_id": "P010",
+      "ordered_at": "2024-09-01T09:20:00Z", "ref_visit_id": "V010_001",
+      "category": "lab",
+      "test": { "code_system": "LOINC", "code": "33914-3", "display": "eGFR and renal function panel" },
+      "status": "completed"
+    }
+  ],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": [
+    {
+      "document_id": "DOC010_001", "patient_id": "P010",
+      "type": "lab_result", "lab_category": "biochemistry",
+      "title": "Renal Function and Electrolytes — Sep 2024",
+      "authored_date": "2024-09-02",
+      "file": {
+        "filename": "P010_RFTs_Sep2024.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P010/P010_RFTs_Sep2024.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V010_001"
+    },
+    {
+      "document_id": "DOC010_002", "patient_id": "P010",
+      "type": "lab_result", "lab_category": "biochemistry",
+      "title": "Renal Function Panel — Feb 2025",
+      "authored_date": "2025-02-11",
+      "file": {
+        "filename": "P010_RFTs_Feb2025.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P010/P010_RFTs_Feb2025.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V010_002"
+    }
+  ]
+}

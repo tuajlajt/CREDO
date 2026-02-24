@@ -1,0 +1,232 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P009",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100009", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Lucas", "middle_name": null, "last_name": "Martinez" },
+      "date_of_birth": "2008-08-14",
+      "sex_at_birth": "male",
+      "blood_type": "AB+"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-SIS-9900", "payer": "SIS Chile", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "allowed" },
+      "preferences": { "communication": "email", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 158 },
+    "last_visit": { "date": "2025-02-05", "visit_id": "V009_001" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-02-05T09:00:00Z",
+    "allergies": [],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "E10.9",
+        "display": "Type 1 diabetes mellitus without complications",
+        "status": "active", "onset_date": "2018-11-20", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Lantus",
+        "inn": "insulin glargine",
+        "atc": "A10AE04",
+        "dose": "14 units",
+        "frequency": "once daily at bedtime",
+        "route": "subcutaneous injection",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX009_001"
+      },
+      {
+        "medicine_name": "NovoRapid",
+        "inn": "insulin aspart",
+        "atc": "A10AB05",
+        "dose": "variable (carb ratio 1 unit per 10g carbs)",
+        "frequency": "with meals",
+        "route": "subcutaneous injection",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "as_needed",
+        "prn_condition": "with each meal — dose based on carbohydrate content and pre-meal blood glucose",
+        "ref_prescription_id": "RX009_002"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "sibling",
+      "condition": {
+        "code_system": "ICD-10", "code": "E10.9",
+        "display": "Type 1 diabetes mellitus without complications",
+        "status": "active", "certainty": "confirmed"
+      },
+      "age_of_onset": 8
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "E10.9",
+        "display": "Type 1 diabetes mellitus without complications",
+        "status": "active", "certainty": "confirmed"
+      },
+      "age_of_onset": 14
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "no",
+    "physical_activity": { "moderate_to_high_sessions_per_week": 6 },
+    "diet_pattern": "balanced"
+  },
+  "visits": [
+    {
+      "visit_id": "V009_001",
+      "patient_id": "P009",
+      "clinician_id": "CLN007",
+      "visit_date": "2025-02-05",
+      "type": "outpatient",
+      "patient_reported_reason": "Paediatric diabetes review — HbA1c and pump settings",
+      "clinician_notes": "Subjective: 16-year-old male with T1DM since age 10, currently on basal-bolus insulin regimen. Parents present. No recent hypoglycaemic episodes requiring assistance. Blood glucose readings mostly 5-9 mmol/L pre-meal. Occasional post-prandial spikes to 13-14 mmol/L. Active — plays football 5x/week. Good understanding of carbohydrate counting.\n\nObjective: Weight 52 kg, Height 158 cm, BMI 20.8. HbA1c 52 mmol/mol (6.9%) — at target. No injection site lipohypertrophy. BP 108/68 mmHg.\n\nAssessment: Well-controlled T1DM on basal-bolus regimen. HbA1c at target for age. Post-prandial excursions consistent with underestimated carbohydrate portions at some meals.\n\nPlan: Continue Lantus 14 units at bedtime. Continue NovoRapid with meals on carb ratio 1:10. Dietician review to refine carb counting for complex meals. Review in 3 months. Annual microalbuminuria and eye screening due.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "E10.9",
+          "display": "Type 1 diabetes mellitus without complications",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX009_001", "RX009_002"],
+      "linked": {
+        "vital_ids": ["VT009_001", "VT009_002", "VT009_003", "VT009_HR04", "VT009_SPO01"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": ["DOC009_001"],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX009_001", "patient_id": "P009",
+      "prescribed_date": "2022-01-10", "medicine_name": "Lantus SoloStar",
+      "inn": "insulin glargine", "atc": "A10AE04",
+      "dose": "14 units", "frequency": "once daily at bedtime",
+      "route": "subcutaneous injection", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "E10.9", "display": "Type 1 diabetes — basal insulin" },
+      "ref": { "type": "visit", "id": "V009_001" }
+    },
+    {
+      "prescription_id": "RX009_002", "patient_id": "P009",
+      "prescribed_date": "2022-01-10", "medicine_name": "NovoRapid FlexPen",
+      "inn": "insulin aspart", "atc": "A10AB05",
+      "dose": "variable", "frequency": "with each meal",
+      "route": "subcutaneous injection", "therapy_duration": "long_term",
+      "prn": true,
+      "prn_condition": "with each meal — dose based on carbohydrate content and pre-meal blood glucose",
+      "indication": { "code_system": "ICD-10", "code": "E10.9", "display": "Type 1 diabetes — bolus insulin" },
+      "ref": { "type": "visit", "id": "V009_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT009_001", "patient_id": "P009",
+      "measured_at": "2025-02-05T08:45:00Z", "ref_visit_id": "V009_001",
+      "type": "weight", "value": 52, "unit": "kg"
+    },
+    {
+      "vital_id": "VT009_002", "patient_id": "P009",
+      "measured_at": "2025-02-05T08:45:00Z", "ref_visit_id": "V009_001",
+      "type": "blood_pressure", "systolic_mmHg": 108, "diastolic_mmHg": 68
+    },
+    {
+      "vital_id": "VT009_003", "patient_id": "P009",
+      "measured_at": "2025-02-05T08:30:00Z", "ref_visit_id": "V009_001",
+      "type": "blood_glucose", "value": 6.4, "unit": "mmol/L"
+    },
+    {
+      "vital_id": "VT009_W01", "patient_id": "P009",
+      "measured_at": "2022-06-15T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 41.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT009_W02", "patient_id": "P009",
+      "measured_at": "2023-02-10T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 44.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT009_W03", "patient_id": "P009",
+      "measured_at": "2023-10-18T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 47.8, "unit": "kg"
+    },
+    {
+      "vital_id": "VT009_W04", "patient_id": "P009",
+      "measured_at": "2024-06-20T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 50.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT009_HR01", "patient_id": "P009",
+      "measured_at": "2022-06-15T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 62, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT009_HR02", "patient_id": "P009",
+      "measured_at": "2023-02-10T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 64, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT009_HR03", "patient_id": "P009",
+      "measured_at": "2023-10-18T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 66, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT009_HR04", "patient_id": "P009",
+      "measured_at": "2025-02-05T08:45:00Z", "ref_visit_id": "V009_001",
+      "type": "heart_rate", "value": 68, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT009_HR05", "patient_id": "P009",
+      "measured_at": "2024-06-20T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 65, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT009_SPO01", "patient_id": "P009",
+      "measured_at": "2025-02-05T08:45:00Z", "ref_visit_id": "V009_001",
+      "type": "spo2", "value": 99, "unit": "%"
+    },
+    {
+      "vital_id": "VT009_SPO02", "patient_id": "P009",
+      "measured_at": "2023-10-18T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 99, "unit": "%"
+    },
+    {
+      "vital_id": "VT009_SPO03", "patient_id": "P009",
+      "measured_at": "2024-06-20T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 98, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": [
+    {
+      "document_id": "DOC009_001", "patient_id": "P009",
+      "type": "lab_result", "lab_category": "endocrinology",
+      "title": "HbA1c — Feb 2025",
+      "authored_date": "2025-02-04",
+      "file": {
+        "filename": "P009_HbA1c_Feb2025.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P009/P009_HbA1c_Feb2025.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V009_001"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+# Database connection configuration
+#
+# The demo database path can also be overridden via the CREDO_DB_PATH
+# environment variable (takes precedence over this file).
+
+database:
+  # Relative to project root.  Override with CREDO_DB_PATH env var.
+  path: "data/synthetic/credo_demo.db"
+
+  # SQLite pragmas applied on every connection
+  pragmas:
+    foreign_keys: "ON"
+    journal_mode: "WAL"      # write-ahead logging for concurrent reads
+    synchronous: "NORMAL"    # safe with WAL; faster than FULL
+
+ehr:
+  # Demo clinician assigned to all visits created via the API.
+  # Points to the CLN001 row seeded by scripts/seed_db.py.
+  demo_clinician_id: "CLN001"

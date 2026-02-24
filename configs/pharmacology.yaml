@@ -1,0 +1,19 @@
+# Pharmacology / DDI pipeline configuration
+# Loaded by src/pharmacology/config.py
+
+rxnav:
+  base_url: "https://rxnav.nlm.nih.gov/REST"
+  timeout_s: 20
+  polite_delay_s: 0.05
+  max_retries: 3
+  backoff_factor: 0.5
+
+rag:
+  # Maximum PubMed abstracts to retrieve per drug pair
+  pubmed_retmax: 8
+  # Optional NCBI API key (10 requests/s with key vs 3/s without)
+  ncbi_api_key: null
+
+symptoms:
+  # Minimum fuzzy-match similarity to report a symptom → side-effect match
+  match_threshold: 0.78

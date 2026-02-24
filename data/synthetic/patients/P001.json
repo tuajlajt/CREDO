@@ -1,0 +1,206 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P001",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100001", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Ana", "middle_name": null, "last_name": "Barros" },
+      "date_of_birth": "1970-06-15",
+      "sex_at_birth": "female",
+      "blood_type": "A+"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-AXA-9901", "payer": "AXA Health", "plan_name": "Comprehensive", "coverage_type": "private" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "allowed", "last_updated": "2023-01-10T00:00:00Z" },
+      "preferences": { "communication": "email", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 162 },
+    "last_visit": { "date": "2024-10-15", "visit_id": "V001_001" }
+  },
+  "clinical_summary": {
+    "updated_at": "2024-10-15T14:00:00Z",
+    "allergies": [],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "I26.9",
+        "display": "Pulmonary embolism without acute cor pulmonale",
+        "status": "active", "onset_date": "2024-10-14", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Xarelto", "inn": "rivaroxaban", "atc": "B01AF01",
+        "dose": "20 mg", "frequency": "once daily with evening meal", "route": "oral",
+        "status": "active", "therapy_duration": "long_term",
+        "administration_pattern": "regular", "prn_condition": null,
+        "ref_prescription_id": "RX001_001"
+      }
+    ],
+    "risk_flags": [
+      {
+        "category": "cardiovascular", "type": "anticoagulation_pe",
+        "severity": "high",
+        "message": "Long-term anticoagulation for PE. Monitor for bleeding. Check renal function every 6 months.",
+        "source": "risk_calculator", "generated_at": "2024-10-15T14:00:00Z"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "I80.3",
+        "display": "Phlebitis and thrombophlebitis of lower extremities — DVT",
+        "status": "inactive", "certainty": "confirmed"
+      }
+    },
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "I25.10",
+        "display": "Atherosclerotic heart disease of native coronary artery without angina pectoris",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 67
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "no",
+    "alcohol": { "units_per_week": 2 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 2 },
+    "diet_pattern": "mediterranean"
+  },
+  "visits": [
+    {
+      "visit_id": "V001_001",
+      "patient_id": "P001",
+      "clinician_id": "CLN002",
+      "visit_date": "2024-10-15",
+      "type": "er",
+      "patient_reported_reason": "Sudden onset shortness of breath and right-sided chest pain",
+      "clinician_notes": "Subjective: 54-year-old female with 12-hour history of pleuritic right-sided chest pain and progressive dyspnoea. Long-haul flight 8 days ago. Right calf swelling and tenderness. No haemoptysis.\n\nObjective: HR 108 bpm, BP 128/82 mmHg, SpO2 89% on RA, RR 22/min, T 37.2 C. Reduced air entry right base. Right calf +3 cm vs left. D-dimer 4.2 ug/mL elevated. CTPA: bilateral pulmonary emboli, right lower lobe predominance, no haemodynamic compromise.\n\nAssessment: Pulmonary embolism (high probability, Wells 7.5). Concomitant right popliteal DVT confirmed on doppler.\n\nPlan: Rivaroxaban 15 mg BD for 21 days, then 20 mg OD with evening meal indefinitely. Admit for monitoring. Thrombophilia screen. Haematology and respiratory outpatient follow-up.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "I26.9",
+          "display": "Pulmonary embolism without acute cor pulmonale",
+          "status": "active", "onset_date": "2024-10-14", "certainty": "confirmed"
+        },
+        {
+          "code_system": "ICD-10", "code": "I80.21",
+          "display": "Phlebitis and thrombophlebitis of right popliteal vein",
+          "status": "active", "onset_date": "2024-10-14", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX001_001"],
+      "linked": {
+        "vital_ids": ["VT001_001", "VT001_002", "VT001_HR01", "VT001_W04"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": [],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX001_001",
+      "patient_id": "P001",
+      "prescribed_date": "2024-10-15",
+      "medicine_name": "Xarelto",
+      "inn": "rivaroxaban",
+      "atc": "B01AF01",
+      "dose": "20 mg",
+      "frequency": "once daily with evening meal",
+      "route": "oral",
+      "therapy_duration": "long_term",
+      "prn": false,
+      "prn_condition": null,
+      "indication": {
+        "code_system": "ICD-10", "code": "I26.9",
+        "display": "Pulmonary embolism without acute cor pulmonale"
+      },
+      "ref": { "type": "visit", "id": "V001_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT001_001", "patient_id": "P001",
+      "measured_at": "2024-10-15T09:30:00Z", "ref_visit_id": "V001_001",
+      "type": "blood_pressure",
+      "systolic_mmHg": 128, "diastolic_mmHg": 82
+    },
+    {
+      "vital_id": "VT001_002", "patient_id": "P001",
+      "measured_at": "2024-10-15T09:30:00Z", "ref_visit_id": "V001_001",
+      "type": "spo2", "value": 89, "unit": "%"
+    },
+    {
+      "vital_id": "VT001_W01", "patient_id": "P001",
+      "measured_at": "2021-10-05T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 67.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT001_W02", "patient_id": "P001",
+      "measured_at": "2022-04-18T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 68.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT001_W03", "patient_id": "P001",
+      "measured_at": "2023-01-10T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 69.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT001_W04", "patient_id": "P001",
+      "measured_at": "2024-10-15T09:30:00Z", "ref_visit_id": "V001_001",
+      "type": "weight", "value": 71.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT001_W05", "patient_id": "P001",
+      "measured_at": "2023-09-20T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 70.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT001_HR01", "patient_id": "P001",
+      "measured_at": "2024-10-15T09:30:00Z", "ref_visit_id": "V001_001",
+      "type": "heart_rate", "value": 108, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT001_HR02", "patient_id": "P001",
+      "measured_at": "2021-10-05T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 72, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT001_HR03", "patient_id": "P001",
+      "measured_at": "2022-04-18T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 74, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT001_HR04", "patient_id": "P001",
+      "measured_at": "2023-01-10T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 68, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT001_HR05", "patient_id": "P001",
+      "measured_at": "2023-09-20T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 71, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT001_SPO01", "patient_id": "P001",
+      "measured_at": "2022-04-18T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 98, "unit": "%"
+    },
+    {
+      "vital_id": "VT001_SPO02", "patient_id": "P001",
+      "measured_at": "2023-09-20T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 97, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": []
+}

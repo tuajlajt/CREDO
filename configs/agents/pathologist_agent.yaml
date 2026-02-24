@@ -1,0 +1,11 @@
+# Pathologist Agent configuration
+# See: med_agents/pathologist-agent.md, src/agents/pathologist_agent.py
+
+pathologist_agent:
+  model_id: "google/medgemma-4b-it"
+  temperature: 0.1
+  max_new_tokens: 768
+  confidence_threshold: 0.6
+  always_require_review: true
+  # FFPE H&E slides only — frozen sections not validated
+  # IHC interpretation not supported without fine-tuning

@@ -1,0 +1,71 @@
+# MedGemma Medical AI — Default Configuration
+# All paths, model IDs, and thresholds defined here.
+# NEVER hardcode any of these values in src/ code.
+# Values can be overridden by model-specific and agent-specific configs.
+
+paths:
+  raw_data: data/raw/                  # PHI present — NEVER mounted into app container
+  deidentified: data/deidentified/     # Safe for model input
+  models: models/                      # Downloaded model weights (gitignored)
+  logs: logs/
+  audit_log: logs/audit.log
+  drug_databases: data/drug_databases/
+  synthetic: data/synthetic/
+  docs: docs/
+
+models:
+  # MedGemma 1.5 (Jan 2026) — latest, improved medical reasoning + high-dim imaging (CT/MRI/WSI)
+  medgemma_4b: "google/medgemma-1.5-4b-it"
+  # medgemma_4b_original: "google/medgemma-4b-it"         # Original 4B — kept for comparison
+  # medgemma_4b_pt: "google/medgemma-4b-pt"               # Pre-trained base (fine-tuning only)
+  # medgemma_27b: "google/medgemma-27b-text-it"           # 27B text-only (~54 GB)
+  medasr: "medical"                    # Google Cloud Speech-to-Text medical model — no download
+  cxr_foundation: "google/cxr-foundation"
+  derm_foundation: "google/derm-foundation"
+  path_foundation: "google/path-foundation"
+  medsiglip: "google/medsiglip-448"
+  hear: "google/hear-pytorch"          # PyTorch variant (easier integration than TF SavedModel)
+  medasr_hf: "google/medasr"          # HF model weights; also accessible via Cloud API
+  # ct_foundation: not on HuggingFace as of Feb 2026 — use Vertex AI / Cloud Healthcare API
+  txgemma_2b: "google/txgemma-2b-predict"
+  txgemma_9b: "google/txgemma-9b-predict"   # Mid-size option added (9B variant exists)
+  # txgemma_27b: "google/txgemma-27b-predict"             # ~54 GB
+  # txgemma_27b_chat: "google/txgemma-27b-chat"           # Conversational explanations
+
+preprocessing:
+  cxr:
+    target_size: [224, 224]
+    normalisation: percentile
+    percentile_low: 1
+    percentile_high: 99
+  ct:
+    target_spacing: [1.0, 1.0, 1.0]
+    window_center: 40
+    window_width: 400
+  pathology:
+    patch_size: 224
+    stride: 224
+    tissue_threshold: 0.5
+    magnification: 20
+  dermoscopy:
+    target_size: [224, 224]
+    normalisation: imagenet
+
+transcription:
+  note_types: ["soap", "radiology", "discharge", "free"]
+  confidence_warning_threshold: 0.85
+  nlp_model: "en_core_sci_lg"
+  output_format: "json"
+  always_require_review: true
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  log_level: "INFO"
+  max_upload_size_mb: 500
+
+compliance:
+  requires_review: true       # ALWAYS true — never change this
+  audit_logging: true
+  phi_in_logs: false          # NEVER allow PHI in logs
+  disclaimer: "Not a substitute for clinical judgement"

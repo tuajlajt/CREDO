@@ -1,0 +1,65 @@
+version: "3.9"
+
+# Development docker-compose
+# For production: docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.dev   # Use Dockerfile.api for production
+    ports:
+      - "8000:8000"
+    environment:
+      - CONFIG_PATH=/app/configs/default.yaml
+      - LOG_LEVEL=INFO
+      - ENVIRONMENT=development
+    env_file:
+      - .env
+    volumes:
+      # Source code (hot reload in dev)
+      - .:/app
+      # Model weights (read-only mount) — set MODEL_WEIGHTS_PATH in .env
+      - ${MODEL_WEIGHTS_PATH:-./models}:/models:ro
+      # Logs (write)
+      - ./logs:/app/logs
+      # HuggingFace cache (avoid re-downloading on restart)
+      - hf_cache:/root/.cache/huggingface
+      # PHI data NEVER mounted into application container
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    env_file:
+      - .env
+    volumes:
+      - ${MODEL_WEIGHTS_PATH:-./models}:/models:ro
+      - ./logs:/app/logs
+      - hf_cache:/root/.cache/huggingface
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7.2-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  hf_cache:
+    driver: local

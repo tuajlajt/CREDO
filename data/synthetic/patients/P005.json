@@ -1,0 +1,399 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P005",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100005", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Harold", "middle_name": "George", "last_name": "Patterson" },
+      "date_of_birth": "1952-09-13",
+      "sex_at_birth": "male",
+      "blood_type": "O-"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-NHS-005", "payer": "NHS", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "restricted", "research": "denied" },
+      "preferences": { "communication": "phone", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 172 },
+    "last_visit": { "date": "2025-01-30", "visit_id": "V005_002" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-01-30T10:00:00Z",
+    "allergies": [],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "I50.9",
+        "display": "Heart failure, unspecified",
+        "status": "active", "onset_date": "2019-11-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I48.91",
+        "display": "Unspecified atrial fibrillation",
+        "status": "active", "onset_date": "2019-11-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications",
+        "status": "active", "onset_date": "2010-03-15", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "I10",
+        "display": "Essential (primary) hypertension",
+        "status": "active", "onset_date": "2008-06-10", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Warfarin",
+        "inn": "warfarin",
+        "atc": "B01AA03",
+        "dose": "variable",
+        "frequency": "once daily (dose per INR)",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_001"
+      },
+      {
+        "medicine_name": "Lasix",
+        "inn": "furosemide",
+        "atc": "C03CA01",
+        "dose": "40 mg",
+        "frequency": "once daily in the morning",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_002"
+      },
+      {
+        "medicine_name": "Tritace",
+        "inn": "ramipril",
+        "atc": "C09AA05",
+        "dose": "5 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_003"
+      },
+      {
+        "medicine_name": "Carvedilol",
+        "inn": "carvedilol",
+        "atc": "C07AG02",
+        "dose": "12.5 mg",
+        "frequency": "twice daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_004"
+      },
+      {
+        "medicine_name": "Glucophage",
+        "inn": "metformin",
+        "atc": "A10BA02",
+        "dose": "500 mg",
+        "frequency": "twice daily with meals",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_005"
+      },
+      {
+        "medicine_name": "Aspirin",
+        "inn": "aspirin",
+        "atc": "B01AC06",
+        "dose": "75 mg",
+        "frequency": "once daily",
+        "route": "oral",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX005_006"
+      }
+    ],
+    "risk_flags": [
+      {
+        "category": "drug_interaction",
+        "type": "ddi_warfarin_aspirin",
+        "severity": "high",
+        "message": "Concurrent warfarin and aspirin significantly increases major bleeding risk. Ensure INR is closely monitored. Consider GI protection with PPI.",
+        "source": "ddi_engine",
+        "generated_at": "2025-01-30T10:00:00Z"
+      },
+      {
+        "category": "polypharmacy",
+        "type": "polypharmacy_6plus",
+        "severity": "high",
+        "message": "Patient on 6 regular medications. High risk of DDIs and non-adherence. Annual comprehensive medicines review recommended.",
+        "source": "ddi_engine",
+        "generated_at": "2025-01-30T10:00:00Z"
+      },
+      {
+        "category": "falls",
+        "type": "falls_risk_antihypertensive_elderly",
+        "severity": "medium",
+        "message": "Elderly male on furosemide, ramipril, and carvedilol — orthostatic hypotension increases falls risk. Monitor lying/standing BP.",
+        "source": "risk_calculator",
+        "generated_at": "2025-01-30T10:00:00Z"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "I50.9",
+        "display": "Heart failure",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 70
+    },
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "E11.9",
+        "display": "Type 2 diabetes mellitus without complications",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 65
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "former",
+    "alcohol": { "units_per_week": 3 },
+    "physical_activity": { "moderate_to_high_sessions_per_week": 0 },
+    "diet_pattern": "low_carb"
+  },
+  "visits": [
+    {
+      "visit_id": "V005_001",
+      "patient_id": "P005",
+      "clinician_id": "CLN004",
+      "visit_date": "2025-01-10",
+      "type": "outpatient",
+      "patient_reported_reason": "Heart failure and AF follow-up, INR check",
+      "clinician_notes": "Subjective: 72-year-old male with CHF and AF. Stable. No increased oedema. Mild ankle swelling. Tolerating warfarin. No bleeding symptoms. Reports INR last checked 6 weeks ago — 2.1.\n\nObjective: BP 136/84 mmHg, HR 76 bpm (irregular), Weight 84 kg (stable). SpO2 95% on RA. Mild pitting oedema bilateral ankles. JVP not elevated. Chest: bibasal fine creps.\n\nINR today: 2.4 (therapeutic range 2.0-3.0 for AF).\n\nAssessment: CHF and AF — stable. Warfarin therapeutic. Continue warfarin. Aspirin co-prescribed for cardiovascular risk — high bleeding risk combination. Note DDI flag.\n\nPlan: Continue all medications. Furosemide dose to remain at 40 mg. Monthly INR. Refer for annual medicines review.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "I50.9",
+          "display": "Heart failure, unspecified",
+          "status": "active", "certainty": "confirmed"
+        },
+        {
+          "code_system": "ICD-10", "code": "I48.91",
+          "display": "Unspecified atrial fibrillation",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": [],
+      "linked": {
+        "vital_ids": ["VT005_001", "VT005_002", "VT005_HR03", "VT005_SPO01"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": ["DOC005_001"],
+        "imaging_study_ids": []
+      }
+    },
+    {
+      "visit_id": "V005_002",
+      "patient_id": "P005",
+      "clinician_id": "CLN001",
+      "visit_date": "2025-01-30",
+      "type": "outpatient",
+      "patient_reported_reason": "Routine GP review",
+      "clinician_notes": "GP review. Stable. Weight unchanged. BP within acceptable range. INR last 2.4. No concerns raised. Referred back to cardiology in 3 months.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "I50.9",
+          "display": "Heart failure, unspecified",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": [],
+      "linked": {
+        "vital_ids": ["VT005_003", "VT005_HR05", "VT005_W05", "VT005_SPO03"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": [],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX005_001", "patient_id": "P005",
+      "prescribed_date": "2019-11-15", "medicine_name": "Warfarin",
+      "inn": "warfarin", "atc": "B01AA03",
+      "dose": "variable", "frequency": "once daily, dose adjusted to INR",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I48.91", "display": "Atrial fibrillation — stroke prevention" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    },
+    {
+      "prescription_id": "RX005_002", "patient_id": "P005",
+      "prescribed_date": "2019-11-15", "medicine_name": "Lasix",
+      "inn": "furosemide", "atc": "C03CA01",
+      "dose": "40 mg", "frequency": "once daily in the morning",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I50.9", "display": "Heart failure — fluid management" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    },
+    {
+      "prescription_id": "RX005_003", "patient_id": "P005",
+      "prescribed_date": "2019-11-15", "medicine_name": "Tritace",
+      "inn": "ramipril", "atc": "C09AA05",
+      "dose": "5 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I50.9", "display": "Heart failure — ACE inhibitor" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    },
+    {
+      "prescription_id": "RX005_004", "patient_id": "P005",
+      "prescribed_date": "2019-11-15", "medicine_name": "Carvedilol",
+      "inn": "carvedilol", "atc": "C07AG02",
+      "dose": "12.5 mg", "frequency": "twice daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "I50.9", "display": "Heart failure — beta-blocker" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    },
+    {
+      "prescription_id": "RX005_005", "patient_id": "P005",
+      "prescribed_date": "2010-03-15", "medicine_name": "Glucophage",
+      "inn": "metformin", "atc": "A10BA02",
+      "dose": "500 mg", "frequency": "twice daily with meals",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "E11.9", "display": "Type 2 diabetes mellitus" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    },
+    {
+      "prescription_id": "RX005_006", "patient_id": "P005",
+      "prescribed_date": "2020-02-01", "medicine_name": "Aspirin",
+      "inn": "aspirin", "atc": "B01AC06",
+      "dose": "75 mg", "frequency": "once daily",
+      "route": "oral", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "Z82.49", "display": "Secondary cardiovascular prevention" },
+      "ref": { "type": "visit", "id": "V005_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT005_001", "patient_id": "P005",
+      "measured_at": "2025-01-10T09:00:00Z", "ref_visit_id": "V005_001",
+      "type": "blood_pressure", "systolic_mmHg": 136, "diastolic_mmHg": 84
+    },
+    {
+      "vital_id": "VT005_002", "patient_id": "P005",
+      "measured_at": "2025-01-10T09:00:00Z", "ref_visit_id": "V005_001",
+      "type": "weight", "value": 84, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_003", "patient_id": "P005",
+      "measured_at": "2025-01-30T09:30:00Z", "ref_visit_id": "V005_002",
+      "type": "blood_pressure", "systolic_mmHg": 132, "diastolic_mmHg": 80
+    },
+    {
+      "vital_id": "VT005_W01", "patient_id": "P005",
+      "measured_at": "2022-03-15T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 88.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_W02", "patient_id": "P005",
+      "measured_at": "2022-10-20T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 87.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_W03", "patient_id": "P005",
+      "measured_at": "2023-05-08T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 86.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_W04", "patient_id": "P005",
+      "measured_at": "2024-02-14T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 85.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_W05", "patient_id": "P005",
+      "measured_at": "2025-01-30T09:30:00Z", "ref_visit_id": "V005_002",
+      "type": "weight", "value": 84.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT005_HR01", "patient_id": "P005",
+      "measured_at": "2022-03-15T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 82, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT005_HR02", "patient_id": "P005",
+      "measured_at": "2022-10-20T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 80, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT005_HR03", "patient_id": "P005",
+      "measured_at": "2025-01-10T09:00:00Z", "ref_visit_id": "V005_001",
+      "type": "heart_rate", "value": 76, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT005_HR04", "patient_id": "P005",
+      "measured_at": "2024-02-14T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 78, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT005_HR05", "patient_id": "P005",
+      "measured_at": "2025-01-30T09:30:00Z", "ref_visit_id": "V005_002",
+      "type": "heart_rate", "value": 74, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT005_SPO01", "patient_id": "P005",
+      "measured_at": "2025-01-10T09:00:00Z", "ref_visit_id": "V005_001",
+      "type": "spo2", "value": 95, "unit": "%"
+    },
+    {
+      "vital_id": "VT005_SPO02", "patient_id": "P005",
+      "measured_at": "2022-10-20T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 94, "unit": "%"
+    },
+    {
+      "vital_id": "VT005_SPO03", "patient_id": "P005",
+      "measured_at": "2025-01-30T09:30:00Z", "ref_visit_id": "V005_002",
+      "type": "spo2", "value": 95, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": [
+    {
+      "document_id": "DOC005_001", "patient_id": "P005",
+      "type": "lab_result", "lab_category": "coagulation",
+      "title": "INR — Jan 2025",
+      "authored_date": "2025-01-10",
+      "file": {
+        "filename": "P005_INR_Jan2025.pdf",
+        "content_type": "application/pdf",
+        "storage_ref": "docs/P005/P005_INR_Jan2025.pdf",
+        "sha256": null
+      },
+      "ref_visit_id": "V005_001"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+# GP Agent configuration
+# See: med_agents/gp-agent.md, src/agents/gp_agent.py
+
+gp_agent:
+  model_id: "google/medgemma-27b-it"
+  temperature: 0.1
+  max_new_tokens: 1024
+  urgency_categories: ["emergency", "urgent", "routine"]
+  max_differentials: 5
+  always_require_review: true

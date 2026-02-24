@@ -1,0 +1,60 @@
+/* Medical AI Design System Tokens
+ *
+ * Rules:
+ * - NEVER use colour as the ONLY differentiator for urgency
+ * - Always pair colour with text label AND icon
+ * - Minimum touch target: 44x44px (keyboard gloves, touchscreens)
+ * - Minimum font size: 16px for clinical readability
+ *
+ * Owner agent: ui-designer-agent
+ */
+
+:root {
+  /* ── Severity colours ──────────────────────────────────────────────────── */
+  /* Always paired with text and icon — never colour alone */
+  --color-emergency: #dc2626;   /* red-600    — tension pneumo, massive PE  */
+  --color-urgent:    #d97706;   /* amber-600  — urgent findings, warnings   */
+  --color-routine:   #2563eb;   /* blue-600   — routine, informational      */
+  --color-normal:    #16a34a;   /* green-600  — within normal limits        */
+
+  /* ── AI output visual distinction ─────────────────────────────────────── */
+  /* AI-generated content must look visually different from verified data   */
+  --color-ai-border: #d97706;
+  --color-ai-bg:     #fffbeb;
+  --color-ai-badge:  #92400e;
+  --color-ai-badge-bg: #fef3c7;
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --font-clinical:   "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:       "JetBrains Mono", "Fira Code", monospace; /* values, codes */
+  --text-base:       16px;    /* minimum for clinical readability */
+  --text-critical:   18px;    /* critical findings — slightly larger */
+  --text-label:      14px;    /* labels, metadata */
+  --line-height:     1.6;     /* generous for clinical scanning */
+
+  /* ── Touch targets ─────────────────────────────────────────────────────── */
+  --min-tap-target:  44px;    /* WCAG 2.5.5 — keyboard, gloves, touchscreens */
+
+  /* ── Spacing ───────────────────────────────────────────────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-6:  24px;
+  --space-8:  32px;
+
+  /* ── Border radius ─────────────────────────────────────────────────────── */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* ── Shadows ───────────────────────────────────────────────────────────── */
+  --shadow-card:     0 1px 3px rgba(0, 0, 0, 0.12);
+  --shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  /* ── Z-index scale ─────────────────────────────────────────────────────── */
+  --z-base:      1;
+  --z-dropdown:  100;
+  --z-modal:     200;
+  --z-emergency: 1000;   /* Emergency alerts always on top */
+}

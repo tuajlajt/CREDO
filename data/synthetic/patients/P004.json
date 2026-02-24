@@ -1,0 +1,258 @@
+{
+  "ehr": { "schema_version": "1.0" },
+  "patient_profile": {
+    "patient_id": "P004",
+    "identifiers": [
+      { "system": "internal_mrn", "value": "MRN-100004", "active": true }
+    ],
+    "demographics": {
+      "name": { "first_name": "Sophie", "middle_name": null, "last_name": "Williams" },
+      "date_of_birth": "1990-04-25",
+      "sex_at_birth": "female",
+      "blood_type": "AB-"
+    },
+    "administrative": {
+      "insurance": [
+        { "policy_id": "POL-NHS-004", "payer": "NHS", "coverage_type": "public" }
+      ],
+      "consents": { "data_sharing": "allowed", "research": "allowed" },
+      "preferences": { "communication": "sms", "dnr_status": "no" }
+    },
+    "static_measurements": { "height_cm": 165 },
+    "last_visit": { "date": "2025-01-20", "visit_id": "V004_001" }
+  },
+  "clinical_summary": {
+    "updated_at": "2025-01-20T15:00:00Z",
+    "allergies": [
+      {
+        "substance": "penicillin",
+        "type": "allergy",
+        "severity": "moderate",
+        "exposure_route": "ingested",
+        "reactions": ["urticaria", "angioedema"],
+        "certainty": "confirmed",
+        "last_reviewed": "2023-06-01"
+      }
+    ],
+    "chronic_conditions": [
+      {
+        "code_system": "ICD-10", "code": "J45.20",
+        "display": "Mild intermittent asthma, uncomplicated",
+        "status": "active", "onset_date": "2005-09-01", "certainty": "confirmed"
+      },
+      {
+        "code_system": "ICD-10", "code": "L20.9",
+        "display": "Atopic dermatitis, unspecified",
+        "status": "active", "onset_date": "2002-01-01", "certainty": "confirmed"
+      }
+    ],
+    "active_medications": [
+      {
+        "medicine_name": "Symbicort",
+        "inn": "budesonide/formoterol",
+        "atc": "R03AK07",
+        "dose": "200/6 mcg",
+        "frequency": "two puffs twice daily",
+        "route": "inhaled",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "regular",
+        "prn_condition": null,
+        "ref_prescription_id": "RX004_001"
+      },
+      {
+        "medicine_name": "Ventolin",
+        "inn": "salbutamol",
+        "atc": "R03AC02",
+        "dose": "100 mcg",
+        "frequency": "as needed",
+        "route": "inhaled",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "as_needed",
+        "prn_condition": "for acute breathlessness or wheeze",
+        "ref_prescription_id": "RX004_002"
+      },
+      {
+        "medicine_name": "Eumovate",
+        "inn": "clobetasone butyrate",
+        "atc": "D07AB01",
+        "dose": "0.05% cream",
+        "frequency": "as needed to affected areas",
+        "route": "topical",
+        "status": "active",
+        "therapy_duration": "long_term",
+        "administration_pattern": "as_needed",
+        "prn_condition": "for eczema flare",
+        "ref_prescription_id": "RX004_003"
+      }
+    ],
+    "risk_flags": [
+      {
+        "category": "allergy_risk", "type": "penicillin_allergy_documented",
+        "severity": "high",
+        "message": "Documented penicillin allergy (urticaria + angioedema). Avoid all penicillins and closely related beta-lactams. Use macrolide or clarithromycin as alternative.",
+        "source": "ddi_engine", "generated_at": "2025-01-20T15:00:00Z"
+      }
+    ]
+  },
+  "family_history": [
+    {
+      "relation": "mother",
+      "condition": {
+        "code_system": "ICD-10", "code": "J45.40",
+        "display": "Moderate persistent asthma, uncomplicated",
+        "status": "active", "certainty": "confirmed"
+      }
+    },
+    {
+      "relation": "father",
+      "condition": {
+        "code_system": "ICD-10", "code": "L20.9",
+        "display": "Atopic dermatitis, unspecified",
+        "status": "inactive", "certainty": "confirmed"
+      },
+      "age_of_onset": 12
+    }
+  ],
+  "lifestyle": {
+    "smoking_status": "no",
+    "physical_activity": { "moderate_to_high_sessions_per_week": 4 },
+    "diet_pattern": "balanced"
+  },
+  "visits": [
+    {
+      "visit_id": "V004_001",
+      "patient_id": "P004",
+      "clinician_id": "CLN003",
+      "visit_date": "2025-01-20",
+      "type": "outpatient",
+      "patient_reported_reason": "Asthma review and eczema flare",
+      "clinician_notes": "Subjective: 34-year-old female for annual asthma review. Reports good control in the last 3 months — no night waking, no oral steroid courses. AQLQ score 5.8. However, presenting with bilateral flexural eczema flare affecting antecubital fossae and popliteal fossae for 2 weeks. No infection signs.\n\nObjective: SpO2 98% on RA. Peak flow 420 L/min (98% predicted). Chest clear. Bilateral flexural erythema and lichenification consistent with atopic dermatitis, no secondary infection.\n\nAssessment: Well-controlled asthma. Eczema flare — likely triggered by cold dry weather.\n\nPlan: Continue Symbicort 200/6 mcg BD + Ventolin PRN. Add Eumovate 0.05% cream to affected areas BD during flare, then reduce to OD when improving. Emollient regularly. Review in 3 months. Note penicillin allergy on record — any future infections require non-penicillin alternatives.",
+      "diagnoses": [
+        {
+          "code_system": "ICD-10", "code": "J45.20",
+          "display": "Mild intermittent asthma, uncomplicated",
+          "status": "active", "certainty": "confirmed"
+        },
+        {
+          "code_system": "ICD-10", "code": "L20.9",
+          "display": "Atopic dermatitis, unspecified",
+          "status": "active", "certainty": "confirmed"
+        }
+      ],
+      "prescription_ids": ["RX004_001", "RX004_002", "RX004_003"],
+      "linked": {
+        "vital_ids": ["VT004_001", "VT004_HR04", "VT004_W04"],
+        "order_ids": [],
+        "procedure_ids": [],
+        "document_ids": [],
+        "imaging_study_ids": []
+      }
+    }
+  ],
+  "prescriptions": [
+    {
+      "prescription_id": "RX004_001", "patient_id": "P004",
+      "prescribed_date": "2023-01-15", "medicine_name": "Symbicort Turbohaler",
+      "inn": "budesonide/formoterol", "atc": "R03AK07",
+      "dose": "200/6 mcg", "frequency": "two puffs twice daily",
+      "route": "inhaled", "therapy_duration": "long_term",
+      "prn": false, "prn_condition": null,
+      "indication": { "code_system": "ICD-10", "code": "J45.20", "display": "Asthma maintenance" },
+      "ref": { "type": "visit", "id": "V004_001" }
+    },
+    {
+      "prescription_id": "RX004_002", "patient_id": "P004",
+      "prescribed_date": "2023-01-15", "medicine_name": "Ventolin Evohaler",
+      "inn": "salbutamol", "atc": "R03AC02",
+      "dose": "100 mcg", "frequency": "as needed, max 4 puffs per episode",
+      "route": "inhaled", "therapy_duration": "long_term",
+      "prn": true, "prn_condition": "for acute breathlessness or wheeze",
+      "max_per_day": 8,
+      "indication": { "code_system": "ICD-10", "code": "J45.20", "display": "Asthma relief" },
+      "ref": { "type": "visit", "id": "V004_001" }
+    },
+    {
+      "prescription_id": "RX004_003", "patient_id": "P004",
+      "prescribed_date": "2025-01-20", "medicine_name": "Eumovate Cream",
+      "inn": "clobetasone butyrate", "atc": "D07AB01",
+      "dose": "0.05% cream", "frequency": "twice daily to affected areas",
+      "route": "topical", "therapy_duration": "short_term",
+      "prn": true, "prn_condition": "for eczema flare",
+      "indication": { "code_system": "ICD-10", "code": "L20.9", "display": "Atopic dermatitis flare" },
+      "ref": { "type": "visit", "id": "V004_001" }
+    }
+  ],
+  "vitals_history": [
+    {
+      "vital_id": "VT004_001", "patient_id": "P004",
+      "measured_at": "2025-01-20T14:30:00Z", "ref_visit_id": "V004_001",
+      "type": "spo2", "value": 98, "unit": "%"
+    },
+    {
+      "vital_id": "VT004_W01", "patient_id": "P004",
+      "measured_at": "2022-03-08T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 60.5, "unit": "kg"
+    },
+    {
+      "vital_id": "VT004_W02", "patient_id": "P004",
+      "measured_at": "2022-11-14T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 61.2, "unit": "kg"
+    },
+    {
+      "vital_id": "VT004_W03", "patient_id": "P004",
+      "measured_at": "2023-09-19T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 62.0, "unit": "kg"
+    },
+    {
+      "vital_id": "VT004_W04", "patient_id": "P004",
+      "measured_at": "2025-01-20T14:30:00Z", "ref_visit_id": "V004_001",
+      "type": "weight", "value": 62.8, "unit": "kg"
+    },
+    {
+      "vital_id": "VT004_W05", "patient_id": "P004",
+      "measured_at": "2024-06-05T00:00:00Z", "ref_visit_id": null,
+      "type": "weight", "value": 63.4, "unit": "kg"
+    },
+    {
+      "vital_id": "VT004_HR01", "patient_id": "P004",
+      "measured_at": "2022-03-08T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 64, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT004_HR02", "patient_id": "P004",
+      "measured_at": "2022-11-14T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 66, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT004_HR03", "patient_id": "P004",
+      "measured_at": "2023-09-19T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 68, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT004_HR04", "patient_id": "P004",
+      "measured_at": "2025-01-20T14:30:00Z", "ref_visit_id": "V004_001",
+      "type": "heart_rate", "value": 70, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT004_HR05", "patient_id": "P004",
+      "measured_at": "2024-06-05T00:00:00Z", "ref_visit_id": null,
+      "type": "heart_rate", "value": 72, "unit": "bpm"
+    },
+    {
+      "vital_id": "VT004_SPO01", "patient_id": "P004",
+      "measured_at": "2022-11-14T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 98, "unit": "%"
+    },
+    {
+      "vital_id": "VT004_SPO02", "patient_id": "P004",
+      "measured_at": "2024-06-05T00:00:00Z", "ref_visit_id": null,
+      "type": "spo2", "value": 99, "unit": "%"
+    }
+  ],
+  "orders": [],
+  "imaging_studies": [],
+  "procedures": [],
+  "documents": []
+}
